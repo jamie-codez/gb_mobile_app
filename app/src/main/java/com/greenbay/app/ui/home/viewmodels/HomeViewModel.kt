@@ -26,7 +26,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
     private val accessToken = pref.getString("accessToken", "")!!
     private val email = pref.getString("email", "")!!
     private val communications = MutableLiveData<List<Communication>>()
-    private val houses = MutableLiveData<List<House>>()
+    val houses = MutableLiveData<List<House>>()
     private val communication = MutableLiveData<Communication>()
     private val updateCommunication = MutableLiveData<Communication>()
     private val tasks = MutableLiveData<List<Task>>()
@@ -37,7 +37,14 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
     private val tenant = MutableLiveData<Tenant>()
     private val stkResponse = MutableLiveData<ResponseModel>()
 
-    fun getCommunications(): MutableLiveData<List<Communication>> {
+    init {
+        getCommunications()
+        getHouses()
+        getTasks()
+        getPayments()
+    }
+
+    private fun getCommunications(): MutableLiveData<List<Communication>> {
         viewModelScope.launch {
             val response = repository.getCommunications(accessToken, "1")
             if (response.status == 200) {
@@ -49,13 +56,13 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
         return communications
     }
 
-    fun getCommunication(id: String): MutableLiveData<Communication> {
+    private fun getCommunication(id: String): MutableLiveData<Communication> {
         viewModelScope.launch {
             val response = repository.getCommunication(accessToken, id)
             if (response.status == 200) {
                 communication.value = response.data as Communication
             } else {
-                communication.value = Communication("", "", "")
+                communication.value = Communication("", "", "", "", "", "", 0)
             }
         }
         return communication
@@ -67,7 +74,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
             if (response.status == 200) {
                 updateCommunication.value = response.data as Communication
             } else {
-                updateCommunication.value = Communication("", "", "")
+                updateCommunication.value = Communication("", "", "", "", "", "", 0)
             }
         }
         return updateCommunication
@@ -82,7 +89,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
             if (response.status == 200) {
                 updateCommunication.value = response.data as Communication
             } else {
-                updateCommunication.value = Communication("", "", "")
+                updateCommunication.value = Communication("", "", "", "", "", "", 0)
             }
         }
         return updateCommunication

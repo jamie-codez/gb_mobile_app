@@ -39,9 +39,10 @@ data class Task(
     @SerializedName("title") val title: String?,
     @SerializedName("description") val description: String?,
     @SerializedName("scheduledDate") val scheduledDate: Long?,
-    @SerializedName("createdBy") val createdBy: String?,
-    @SerializedName("createdOn") val createdOn: Long?,
-    @SerializedName("status") val status: Boolean?,
+    @SerializedName("createdBy") val createdBy: Int,
+    @SerializedName("createdOn") val createdOn: String,
+    @SerializedName("status") val status: Int,
+    val b: Boolean,
 )
 
 data class Tenant(

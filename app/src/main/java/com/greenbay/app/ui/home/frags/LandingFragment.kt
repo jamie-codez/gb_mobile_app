@@ -7,15 +7,18 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.greenbay.app.R
 import com.greenbay.app.databinding.FragmentLandingBinding
+import com.greenbay.app.ui.home.adapters.HouseAdapter
+import com.greenbay.app.ui.home.viewmodels.HomeViewModel
 
 class LandingFragment : Fragment() {
-  private lateinit var binding: FragmentLandingBinding
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    private val viewModel: HomeViewModel by lazy {
+        HomeViewModel(requireActivity().application)
     }
+    private lateinit var binding: FragmentLandingBinding
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -27,13 +30,15 @@ class LandingFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val housesRecyclerView = binding.homeHousesListRv
+        housesRecyclerView.setHasFixedSize(true)
+        housesRecyclerView.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        housesRecyclerView.adapter = HouseAdapter(listOf())
+
+        viewModel.houses.observe(viewLifecycleOwner) {
+            (housesRecyclerView.adapter as HouseAdapter).setHouses(it)
+        }
     }
 
-    override fun setHasOptionsMenu(hasMenu: Boolean) {
-        super.setHasOptionsMenu(hasMenu)
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-    }
 }
