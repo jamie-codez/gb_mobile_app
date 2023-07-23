@@ -1,17 +1,16 @@
 package com.greenbay.app.ui.home.frags
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
+import androidx.core.widget.doOnTextChanged
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.greenbay.app.R
-import com.greenbay.app.databinding.AddNotificationDialogBinding
 import com.greenbay.app.databinding.CreatePaymentDialogBinding
-import com.greenbay.app.databinding.FragmentLandingBinding
 import com.greenbay.app.databinding.FragmentPaymentsBinding
 import com.greenbay.app.databinding.PayDialogBinding
 import com.greenbay.app.ui.home.adapters.PaymentsAdapter
@@ -83,6 +82,35 @@ class PaymentsFragment : Fragment() {
             val alertDialogBuilder = AlertDialog.Builder(requireContext())
             alertDialogBuilder.setTitle("Add Payment")
             alertDialogBuilder.setView(binding.root)
+            binding.paymentDialogTitleEt.doOnTextChanged { text, start, before, count ->
+                if (text.toString().trim().isNotEmpty()) {
+                    binding.paymentDialogTitleEtl.error = null
+                } else {
+                    binding.paymentDialogTitleEtl.error = "Title is required"
+                }
+            }
+            binding.communicationDialogDescriptionEt.doOnTextChanged { text, start, before, count ->
+                if (text.toString().trim().isNotEmpty()) {
+                    binding.communicationDialogDescriptionEtl.error = null
+                } else {
+                    binding.communicationDialogDescriptionEtl.error = "Description is required"
+                }
+            }
+            binding.paymentDialogReferenceEt.doOnTextChanged { text, start, before, count ->
+                if (text.toString().trim().isNotEmpty()) {
+                    binding.paymentDialogReferenceEtl.error = null
+                } else {
+                    binding.paymentDialogReferenceEtl.error = "Transaction code is required"
+                }
+            }
+            binding.paymentDialogAmountEt.doOnTextChanged { text, start, before, count ->
+                if (text.toString().trim().isNotEmpty()) {
+                    binding.paymentDialogAmountEtl.error = null
+                } else {
+                    binding.paymentDialogAmountEtl.error = "Amount is required"
+                }
+            }
+
             binding.dialogAddPaymentBtn.setOnClickListener {
                 binding.dialogAddPaymentBtn.isEnabled = false
                 binding.dialogAddPaymentBtn.text = "Processing..."
