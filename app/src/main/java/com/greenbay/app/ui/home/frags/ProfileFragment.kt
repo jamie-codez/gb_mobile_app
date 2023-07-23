@@ -7,9 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import com.greenbay.app.R
 import com.greenbay.app.databinding.FragmentLandingBinding
+import com.greenbay.app.databinding.FragmentProfileBinding
 
 class ProfileFragment : Fragment() {
-    private lateinit var binding: FragmentLandingBinding
+    private lateinit var binding: FragmentProfileBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -19,7 +20,7 @@ class ProfileFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentLandingBinding.inflate(inflater, container, false)
+        binding = FragmentProfileBinding.inflate(inflater, container, false)
         return binding.root
     }
 
