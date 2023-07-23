@@ -44,4 +44,7 @@ class Repository(private val apiService: GreenBayService) {
     ) =
         apiService.updateCommunication(token, id, communicationUpdate)
 
+    suspend fun getHouses(token: String, page: String) =
+        apiService.getHouses(token, page.toInt())
+
 }

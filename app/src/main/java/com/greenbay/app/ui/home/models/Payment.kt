@@ -29,3 +29,37 @@ data class CommunicationUpdate(
     @SerializedName("to") val to: String?,
     @SerializedName("payload") val payload: Any?,
 )
+
+data class Task(
+    @SerializedName("_id") val id: String?,
+    @SerializedName("title") val title: String?,
+    @SerializedName("description") val description: String?,
+    @SerializedName("dateCreated") val dateCreated: Long?,
+    @SerializedName("scheduledDate") val scheduledDate: Long?,
+    @SerializedName("createdBy") val createdBy: String?,
+    @SerializedName("createdOn") val createdOn: Long?,
+    @SerializedName("status") val status: Boolean?,
+)
+
+data class Tenant(
+    @SerializedName("_id") val id: String?,
+    @SerializedName("firstName") val firstName: String?,
+    @SerializedName("lastName") val lastName: String?,
+    @SerializedName("email") val email: String?,
+    @SerializedName("phone") val phone: String?,
+    @SerializedName("houseNumber") val houseNumber: String?,
+    @SerializedName("rent") val rent: String?,
+    @SerializedName("deposit") val deposit: String?,
+    @SerializedName("floorNumber") val floorNumber: String?,
+)
+
+data class House(
+    @SerializedName("_id") val id: String?,
+    @SerializedName("houseNumber") val houseNumber: String?,
+    @SerializedName("rent") val rent: String?,
+    @SerializedName("deposit") val deposit: String?,
+    @SerializedName("floorNumber") val floorNumber: String?,
+    @SerializedName("addedBy") val addedBy: String?,
+    @SerializedName("createdOn") val createdOn: String?,
+    @SerializedName("occupied") val occupied: Boolean?,
+)

@@ -170,5 +170,15 @@ interface GreenBayService {
         @Body communicationUpdate: CommunicationUpdate
     ): ResponseModel
 
+    @GET("houses/{page}")
+    @Headers(
+        "Content-Type: application/json",
+        "Accept: application/json"
+    )
+    suspend fun getHouses(
+        @Header("access-token") token: String,
+        @Path("page") page: Int
+    ): ResponseModel
+
 
 }

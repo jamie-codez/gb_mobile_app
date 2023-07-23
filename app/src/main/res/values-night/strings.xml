@@ -3,4 +3,10 @@
     <string name="green_bay">Green Bay</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
+    <string name="fab">fab</string>
+    <string name="notifications">Notifications</string>
+    <string name="payments">Payments</string>
+    <string name="tasks">Tasks</string>
+    <string name="profile">Profile</string>
+    <string name="home">Home</string>
 </resources>
