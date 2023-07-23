@@ -11,12 +11,17 @@ import com.greenbay.app.databinding.NotificationItemBinding
 import com.greenbay.app.ui.home.models.Communication
 import java.util.Locale
 
-class NotificationsAdapter(private val notifications: List<Communication>) :
+class NotificationsAdapter(private var notifications: List<Communication>) :
     RecyclerView.Adapter<NotificationsAdapter.NotificationsViewHolder>() {
     private lateinit var onNotificationClickListener: OnNotificationClickListener
 
     interface OnNotificationClickListener {
         fun onNotificationClick(position: Int)
+    }
+
+    fun setNotifications(notifications: List<Communication>) {
+        this.notifications = notifications
+        notifyDataSetChanged()
     }
 
     fun setOnNotificationClickListener(listener: OnNotificationClickListener) {

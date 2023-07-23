@@ -6,16 +6,22 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
+import com.greenbay.app.databinding.PaymentItemBinding
 import com.greenbay.app.ui.home.models.Payment
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class PaymentsAdapter(private val payments: List<Payment>) :
+class PaymentsAdapter(private var payments: List<Payment>) :
     RecyclerView.Adapter<PaymentsAdapter.PaymentsViewHolder>() {
     private lateinit var onPaymentClickListener: OnPaymentClickListener
 
     interface OnPaymentClickListener {
         fun onPaymentClick(position: Int)
+    }
+
+    fun setPayments(payments: List<Payment>) {
+        this.payments = payments
+        notifyDataSetChanged()
     }
 
     fun setOnPaymentClickListener(listener: OnPaymentClickListener) {
@@ -45,9 +51,18 @@ class PaymentsAdapter(private val payments: List<Payment>) :
         @RequiresApi(Build.VERSION_CODES.N)
         fun bind(payment: Payment) {
             binding.paymentTitleTv.text = payment.title
+            binding.paymentAmountTv.text = payment.amount.toString()
             binding.paymentDescriptionTv.text = payment.description
             binding.paymentTimeTv.text =
-                SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(payment.dateCreated)
+                SimpleDateFormat(
+                    "dd/MM/yyyy HH:mm:ss",
+                    Locale.getDefault()
+                ).format(payment.dateCreated)
+            if (payment.verified == true) {
+                binding.paymentDot.setBackgroundColor(binding.root.context.getColor(com.greenbay.app.R.color.green))
+            } else {
+                binding.paymentDot.setBackgroundColor(binding.root.context.getColor(com.greenbay.app.R.color.red))
+            }
         }
     }
 }

@@ -26,6 +26,16 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
+            android:id="@+id/payment_reference_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="Reference No. 1234567890"
+            android:textSize="15sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/payment_title_tv" />
+
+        <TextView
             android:id="@+id/payment_description_tv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -33,7 +43,18 @@
             android:layout_marginEnd="10dp"
             android:text="qwertyuiopoiuytsasdfghjkjgfdsasdfuioiuytrewqwertyuioiuytre"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/notification_title_tv" />
+            app:layout_constraintTop_toBottomOf="@id/payment_reference_tv" />
+
+        <TextView
+            android:id="@+id/payment_amount_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="10dp"
+            android:text="Amount: 3000"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/payment_time_tv" />
 
         <TextView
             android:id="@+id/payment_time_tv"
@@ -52,9 +73,9 @@
             android:layout_marginTop="10dp"
             android:layout_marginEnd="8dp"
             android:background="@drawable/circle"
-            app:layout_constraintEnd_toStartOf="@id/notification_time_tv"
-            app:layout_constraintTop_toTopOf="parent"
-            android:orientation="horizontal" />
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toStartOf="@id/payment_time_tv"
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.cardview.widget.CardView>
