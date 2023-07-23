@@ -1,12 +1,14 @@
 package com.greenbay.app.ui.auth.frags
 
 import android.os.Bundle
+import android.util.Patterns
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
+import androidx.core.widget.doOnTextChanged
 import androidx.navigation.fragment.NavHostFragment
 import com.greenbay.app.R
 import com.greenbay.app.databinding.FragmentLoginBinding
@@ -34,7 +36,22 @@ class LoginFragment : Fragment() {
         val navHostFragment =
             requireActivity().supportFragmentManager.findFragmentById(R.id.splash_host_fragment) as NavHostFragment
         val navController = navHostFragment.navController
-
+        binding.loginEmailEt.doOnTextChanged { text, start, before, count ->
+            if (text.toString().trim().isNotEmpty()) {
+                binding.loginEmailEtl.error = null
+            } else if (!Patterns.EMAIL_ADDRESS.matcher(text.toString().trim()).matches()) {
+                binding.loginEmailEtl.error = "Invalid email address"
+            } else {
+                binding.loginEmailEtl.error = "Email is required"
+            }
+        }
+        binding.loginPasswordEt.doOnTextChanged { text, start, before, count ->
+            if (text.toString().trim().isNotEmpty()) {
+                binding.loginPasswordEtl.error = null
+            } else {
+                binding.loginPasswordEtl.error = "Password is required"
+            }
+        }
         binding.loginBtn.setOnClickListener {
             binding.loginBtn.isEnabled = false
             binding.loginBtn.text = "Please wait..."
