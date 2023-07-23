@@ -19,7 +19,7 @@ class Repository(private val apiService: GreenBayService) {
     suspend fun getTasks(token: String, page: String) =
         apiService.getTasks(token, page.toInt())
 
-    suspend fun getStkPush(token: String) = apiService.getStkPush(token)
+    suspend fun getStkPush(token: String,amount:Int) = apiService.getStkPush(token,amount)
     suspend fun getPayments(token: String, email: String, page: String) =
         apiService.getPayments(token, email, page.toInt())
 

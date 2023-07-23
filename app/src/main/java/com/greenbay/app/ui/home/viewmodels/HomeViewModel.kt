@@ -133,10 +133,10 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
         return payment
     }
 
-    fun getStkPush(): MutableLiveData<ResponseModel> {
+    fun getStkPush(amount:Int): MutableLiveData<ResponseModel> {
         val stkResponse = MutableLiveData<ResponseModel>()
         viewModelScope.launch {
-            val response = repository.getStkPush(accessToken)
+            val response = repository.getStkPush(accessToken,amount)
             if (response.status == 200) {
                 stkResponse.value = response.data as ResponseModel
             } else {

@@ -70,7 +70,7 @@ interface GreenBayService {
         "Accept: application/json"
     )
     suspend fun getStkPush(
-        @Header("access-token") token: String
+        @Header("access-token") token: String,amount:Int
     ): ResponseModel
 
     // Payments Endpoints
