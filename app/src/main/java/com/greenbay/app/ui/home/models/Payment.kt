@@ -20,9 +20,13 @@ data class PaymentUpdate(
 )
 
 data class Communication(
+    @SerializedName("_id") val id: String?,
+    @SerializedName("id") val commId: String?,
     @SerializedName("to") val to: String?,
     @SerializedName("title") val title: String?,
     @SerializedName("description") val description: String?,
+    @SerializedName("createdBy") val createdBy: String?,
+    @SerializedName("dateCreated") val dateCreated: Long?,
 )
 
 data class CommunicationUpdate(
