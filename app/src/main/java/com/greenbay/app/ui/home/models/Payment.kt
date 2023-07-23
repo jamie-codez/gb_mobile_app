@@ -38,7 +38,6 @@ data class Task(
     @SerializedName("_id") val id: String?,
     @SerializedName("title") val title: String?,
     @SerializedName("description") val description: String?,
-    @SerializedName("dateCreated") val dateCreated: Long?,
     @SerializedName("scheduledDate") val scheduledDate: Long?,
     @SerializedName("createdBy") val createdBy: String?,
     @SerializedName("createdOn") val createdOn: Long?,

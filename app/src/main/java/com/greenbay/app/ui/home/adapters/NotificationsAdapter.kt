@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
+import com.greenbay.app.R
 import com.greenbay.app.databinding.NotificationItemBinding
 import com.greenbay.app.ui.home.models.Communication
 import java.util.Locale
@@ -31,7 +32,7 @@ class NotificationsAdapter(private var notifications: List<Communication>) :
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NotificationsViewHolder {
         return NotificationsViewHolder(
             LayoutInflater.from(parent.context).inflate(
-                com.greenbay.app.R.layout.notification_item,
+                R.layout.notification_item,
                 parent,
                 false
             )
