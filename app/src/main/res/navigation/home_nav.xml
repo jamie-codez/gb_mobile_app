@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/home_nav"
+    app:startDestination="@id/landingFragment">
+
+    <fragment
+        android:id="@+id/landingFragment"
+        android:name="com.greenbay.app.ui.home.frags.LandingFragment"
+        android:label="Landing"
+        tools:layout="@layout/fragment_landing" />
+    <fragment
+        android:id="@+id/notificationsFragment"
+        android:name="com.greenbay.app.ui.home.frags.NotificationsFragment"
+        android:label="Notifications"
+        tools:layout="@layout/fragment_notifications" />
+    <fragment
+        android:id="@+id/tasksFragment"
+        android:name="com.greenbay.app.ui.home.frags.TasksFragment"
+        android:label="Tasks"
+        tools:layout="@layout/fragment_tasks" />
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.greenbay.app.ui.home.frags.ProfileFragment"
+        android:label="Profile"
+        tools:layout="@layout/fragment_profile" />
+    <fragment
+        android:id="@+id/paymentsFragment"
+        android:name="com.greenbay.app.ui.home.frags.PaymentsFragment"
+        android:label="fragment_payments"
+        tools:layout="@layout/fragment_payments" />
+</navigation>
