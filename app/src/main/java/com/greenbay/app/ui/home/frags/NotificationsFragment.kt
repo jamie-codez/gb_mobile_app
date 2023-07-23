@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.widget.doOnTextChanged
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.greenbay.app.R
@@ -40,16 +41,30 @@ class NotificationsFragment : Fragment() {
             val alertDialogBuilder = androidx.appcompat.app.AlertDialog.Builder(requireContext())
             alertDialogBuilder.setTitle("Add Notification")
             alertDialogBuilder.setView(binding.root)
-            alertDialogBuilder.setPositiveButton("Add") { _, _ ->
+            binding.communicationDialogTitleEt.doOnTextChanged { text, start, before, count ->
+                if (text.toString().trim().isNotEmpty()) {
+                    binding.communicationDialogTitleEtl.error = null
+                } else {
+                    binding.communicationDialogTitleEtl.error = "Title is required"
+                }
+            }
+            binding.communicationDialogDescriptionEt.doOnTextChanged { text, start, before, count ->
+                if (text.toString().trim().isNotEmpty()) {
+                    binding.communicationDialogDescriptionEtl.error = null
+                } else {
+                    binding.communicationDialogDescriptionEtl.error = "Message is required"
+                }
+            }
+            binding.dialogAddBtn.setOnClickListener {
                 val title = binding.communicationDialogTitleEt.text.toString().trim()
                 val description = binding.communicationDialogDescriptionEt.text.toString().trim()
                 if (title.isEmpty()) {
                     binding.communicationDialogDescriptionEtl.error = "Title is required"
-                    return@setPositiveButton
+                    return@setOnClickListener
                 }
                 if (description.isEmpty()) {
                     binding.communicationDialogDescriptionEtl.error = "Message is required"
-                    return@setPositiveButton
+                    return@setOnClickListener
                 }
                 val communication =
                     Communication(
