@@ -24,20 +24,12 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
         Context.MODE_PRIVATE
     )
     private var updateUser = MutableLiveData<AppUser>()
-    fun getLoginStatus(): LiveData<Boolean> {
-        return loginStatus
-    }
 
-
-    fun login(email: String, password: String, activity: Activity): LiveData<Boolean> {
+    fun login(email: String, password: String): LiveData<Boolean> {
         viewModelScope.launch {
             val response = repository.login(LoginModel(email, password))
             if (response.status == 200) {
                 loginStatus = MutableLiveData(true)
-                val prefs = activity.getSharedPreferences(
-                    activity.getString(R.string.app_name),
-                    Context.MODE_PRIVATE
-                )
                 with(prefs.edit()) {
                     putString("accessToken", response.data.toString())
                     apply()

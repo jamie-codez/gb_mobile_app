@@ -9,6 +9,8 @@ import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.greenbay.app.R
+import com.greenbay.app.databinding.AddNotificationDialogBinding
+import com.greenbay.app.databinding.CreatePaymentDialogBinding
 import com.greenbay.app.databinding.FragmentLandingBinding
 import com.greenbay.app.databinding.FragmentPaymentsBinding
 import com.greenbay.app.databinding.PayDialogBinding
@@ -33,7 +35,7 @@ class PaymentsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.makePaymentFab.setOnClickListener{
+        binding.makePaymentFab.setOnClickListener {
             val payView = layoutInflater.inflate(R.layout.pay_dialog, view as ViewGroup?, false)
             val binding = PayDialogBinding.bind(payView)
             val alertDialogBuilder = AlertDialog.Builder(requireContext())
@@ -56,14 +58,16 @@ class PaymentsFragment : Fragment() {
                     binding.dialogPayBtn.text = "Pay"
                     return@setOnClickListener
                 }
-                viewModel.getStkPush(ceil(amount).toInt()).observe(viewLifecycleOwner){
-                    if (it.status==200){
-                        Snackbar.make(binding.root, "Payment request sent", Snackbar.LENGTH_LONG).show()
+                viewModel.getStkPush(ceil(amount).toInt()).observe(viewLifecycleOwner) {
+                    if (it.status == 200) {
+                        Snackbar.make(binding.root, "Payment request sent", Snackbar.LENGTH_LONG)
+                            .show()
                         binding.dialogPayBtn.isEnabled = true
                         binding.dialogPayBtn.text = "Pay"
                         alertDialogBuilder.create().dismiss()
-                    }else{
-                        Snackbar.make(binding.root, "Payment request failed", Snackbar.LENGTH_LONG).show()
+                    } else {
+                        Snackbar.make(binding.root, "Payment request failed", Snackbar.LENGTH_LONG)
+                            .show()
                         binding.dialogPayBtn.isEnabled = true
                         binding.dialogPayBtn.text = "Pay"
                     }
@@ -71,6 +75,69 @@ class PaymentsFragment : Fragment() {
             }
             val alertDialog = alertDialogBuilder.create()
             alertDialog.show()
+        }
+        binding.addPaymentFab.setOnClickListener {
+            val payView =
+                layoutInflater.inflate(R.layout.create_payment_dialog, view as ViewGroup?, false)
+            val binding = CreatePaymentDialogBinding.bind(payView)
+            val alertDialogBuilder = AlertDialog.Builder(requireContext())
+            alertDialogBuilder.setTitle("Add Payment")
+            alertDialogBuilder.setView(binding.root)
+            binding.dialogAddPaymentBtn.setOnClickListener {
+                binding.dialogAddPaymentBtn.isEnabled = false
+                binding.dialogAddPaymentBtn.text = "Processing..."
+                val title = binding.paymentDialogTitleEt.text.toString().trim()
+                val description = binding.communicationDialogDescriptionEt.text.toString().trim()
+                val transactionCode = binding.paymentDialogReferenceEt.text.toString().trim()
+                val amount = binding.paymentDialogAmountEt.text.toString().trim()
+                if (title.isEmpty()) {
+                    binding.paymentDialogTitleEtl.error = "Title is required"
+                    binding.dialogAddPaymentBtn.isEnabled = true
+                    binding.dialogAddPaymentBtn.text = "Add"
+                    return@setOnClickListener
+                }
+                if (description.isEmpty()) {
+                    binding.communicationDialogDescriptionEtl.error = "Description is required"
+                    binding.dialogAddPaymentBtn.isEnabled = true
+                    binding.dialogAddPaymentBtn.text = "Add"
+                    return@setOnClickListener
+                }
+                if (transactionCode.isEmpty()) {
+                    binding.paymentDialogReferenceEtl.error = "Transaction code is required"
+                    binding.dialogAddPaymentBtn.isEnabled = true
+                    binding.dialogAddPaymentBtn.text = "Add"
+                    return@setOnClickListener
+                }
+                if (amount.isEmpty()) {
+                    binding.paymentDialogAmountEtl.error = "Amount is required"
+                    binding.dialogAddPaymentBtn.isEnabled = true
+                    binding.dialogAddPaymentBtn.text = "Add"
+                    return@setOnClickListener
+                }
+                val payment = com.greenbay.app.ui.home.models.Payment(
+                    title = title,
+                    description = description,
+                    transactionCode = transactionCode,
+                    amount = amount,
+                    from = viewModel.email,
+                    dateCreated = System.currentTimeMillis(),
+                    verified = false,
+                )
+                viewModel.createPayment(payment).observe(viewLifecycleOwner) {
+                    if (it.id != null) {
+                        Snackbar.make(binding.root, "Payment added", Snackbar.LENGTH_LONG).show()
+                        binding.dialogAddPaymentBtn.isEnabled = true
+                        binding.dialogAddPaymentBtn.text = "Add"
+                        alertDialogBuilder.create().dismiss()
+                    } else {
+                        Snackbar.make(binding.root, "Payment failed", Snackbar.LENGTH_LONG).show()
+                        binding.dialogAddPaymentBtn.isEnabled = true
+                        binding.dialogAddPaymentBtn.text = "Add"
+                    }
+                }
+                val alertDialog = alertDialogBuilder.create()
+                alertDialog.show()
+            }
         }
         val paymentsRecyclerView = binding.paymentsRv
         paymentsRecyclerView.setHasFixedSize(true)

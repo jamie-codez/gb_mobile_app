@@ -3,7 +3,7 @@ package com.greenbay.app.ui.home.models
 import com.google.gson.annotations.SerializedName
 
 data class Payment(
-    @SerializedName("_id") val id: String?,
+    @SerializedName("_id") val id: String?=null,
     @SerializedName("title") val title: String?,
     @SerializedName("description") val description: String?,
     @SerializedName("transactionCode") val transactionCode: String?,
@@ -20,13 +20,13 @@ data class PaymentUpdate(
 )
 
 data class Communication(
-    @SerializedName("_id") val id: String?,
-    @SerializedName("id") val commId: String?,
+    @SerializedName("_id") val id: String?=null,
+    @SerializedName("id") val commId: String?=null,
     @SerializedName("to") val to: String?,
     @SerializedName("title") val title: String?,
     @SerializedName("description") val description: String?,
     @SerializedName("createdBy") val createdBy: String?,
-    @SerializedName("dateCreated") val dateCreated: Long?,
+    @SerializedName("dateCreated") val dateCreated: Long?=null,
 )
 
 data class CommunicationUpdate(
