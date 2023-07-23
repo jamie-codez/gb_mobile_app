@@ -1,14 +1,11 @@
 package com.greenbay.app.ui.home.frags
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.greenbay.app.R
 import com.greenbay.app.databinding.FragmentLandingBinding
 import com.greenbay.app.ui.home.adapters.HouseAdapter
 import com.greenbay.app.ui.home.viewmodels.HomeViewModel
@@ -36,7 +33,7 @@ class LandingFragment : Fragment() {
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         housesRecyclerView.adapter = HouseAdapter(listOf())
 
-        viewModel.houses.observe(viewLifecycleOwner) {
+        viewModel.getHouses().observe(viewLifecycleOwner) {
             (housesRecyclerView.adapter as HouseAdapter).setHouses(it)
         }
     }
