@@ -7,6 +7,7 @@ import com.greenbay.app.ui.home.models.Communication
 import com.greenbay.app.ui.home.models.CommunicationUpdate
 import com.greenbay.app.ui.home.models.Payment
 import com.greenbay.app.ui.home.models.PaymentUpdate
+import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
@@ -18,17 +19,17 @@ import retrofit2.http.Path
 interface GreenBayService {
     //User Endpoints
     @POST("/login")
-    suspend fun login(@Body loginModel: LoginModel): ResponseModel
+    suspend fun login(@Body loginModel: LoginModel): Call<ResponseModel>
 
     @GET("/user/{id}")
-    suspend fun getUser(): ResponseModel
+    suspend fun getUser(): Call<ResponseModel>
 
     @PUT("/user/{id}")
     suspend fun updateUser(
         @Header("access-token") token: String,
         @Path("id") id: String,
         @Body appUser: AppUser
-    ): ResponseModel
+    ): Call<ResponseModel>
 
     //Team Endpoints
 
@@ -40,7 +41,7 @@ interface GreenBayService {
     suspend fun getTenant(
         @Header("access-token") token: String,
         @Path("id") id: String
-    ): ResponseModel
+    ): Call<ResponseModel>
 
     // Task Endpoints
     @GET("/task/{id}")
@@ -51,7 +52,7 @@ interface GreenBayService {
     suspend fun getTask(
         @Header("access-token") token: String,
         @Path("id") id: String
-    ): ResponseModel
+    ): Call<ResponseModel>
 
     @GET("/tasks/{page}")
     @Headers(
@@ -61,7 +62,7 @@ interface GreenBayService {
     suspend fun getTasks(
         @Header("access-token") token: String,
         @Path("page") page: Int
-    ): ResponseModel
+    ): Call<ResponseModel>
 
     //STK Push Endpoints
     @GET("/stk-push/")
@@ -71,7 +72,7 @@ interface GreenBayService {
     )
     suspend fun getStkPush(
         @Header("access-token") token: String,amount:Int
-    ): ResponseModel
+    ): Call<ResponseModel>
 
     // Payments Endpoints
     @GET("/payments/{email}/{page}")
@@ -83,7 +84,7 @@ interface GreenBayService {
         @Header("access-token") token: String,
         @Path("email") email: String,
         @Path("page") page: Int
-    ): ResponseModel
+    ): Call<ResponseModel>
 
     @POST("/payments")
     @Headers(
@@ -93,7 +94,7 @@ interface GreenBayService {
     suspend fun createPayment(
         @Header("access-token") token: String,
         @Body payment: Payment
-    ): ResponseModel
+    ): Call<ResponseModel>
 
     @PUT("/payments/{id}")
     @Headers(
@@ -104,7 +105,7 @@ interface GreenBayService {
         @Header("access-token") token: String,
         @Path("id") id: String,
         @Body payment: PaymentUpdate
-    ): ResponseModel
+    ): Call<ResponseModel>
 
     @GET("/payments/{id}")
     @Headers(
@@ -114,7 +115,7 @@ interface GreenBayService {
     suspend fun getPayment(
         @Header("access-token") token: String,
         @Path("id") id: String
-    ): ResponseModel
+    ): Call<ResponseModel>
 
     // House Endpoints
 
@@ -126,7 +127,7 @@ interface GreenBayService {
     suspend fun getHouse(
         @Header("access-token") token: String,
         @Path("id") id: String
-    ): ResponseModel
+    ): Call<ResponseModel>
 
     // Communication Endpoints
     @POST("/communications")
@@ -137,7 +138,7 @@ interface GreenBayService {
     suspend fun createCommunication(
         @Header("access-token") token: String,
         @Body communication: Communication
-    ): ResponseModel
+    ): Call<ResponseModel>
 
     @GET("/communications/{page}")
     @Headers(
@@ -147,7 +148,7 @@ interface GreenBayService {
     suspend fun getCommunications(
         @Header("access-token") token: String,
         @Path("page") page: Int
-    ): ResponseModel
+    ): Call<ResponseModel>
 
     @GET("/communications/{id}")
     @Headers(
@@ -157,7 +158,7 @@ interface GreenBayService {
     suspend fun getCommunication(
         @Header("access-token") token: String,
         @Path("id") id: String
-    ): ResponseModel
+    ): Call<ResponseModel>
 
     @PUT("/communications/{id}")
     @Headers(
@@ -168,7 +169,7 @@ interface GreenBayService {
         @Header("access-token") token: String,
         @Path("id") id: String,
         @Body communicationUpdate: CommunicationUpdate
-    ): ResponseModel
+    ): Call<ResponseModel>
 
     @GET("houses/{page}")
     @Headers(
@@ -178,7 +179,7 @@ interface GreenBayService {
     suspend fun getHouses(
         @Header("access-token") token: String,
         @Path("page") page: Int
-    ): ResponseModel
+    ): Call<ResponseModel>
 
 
 }
