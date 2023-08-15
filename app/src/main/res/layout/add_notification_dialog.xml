@@ -51,7 +51,7 @@
                 android:layout_gravity="top"
                 android:gravity="top"
                 android:inputType="numberDecimal"
-                app:textMultiLine="true" />
+              />
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button

@@ -4,16 +4,19 @@ import android.app.Activity
 import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.google.gson.JsonObject
 import com.greenbay.app.R
 import com.greenbay.app.models.AppUser
 import com.greenbay.app.models.LoginModel
 import com.greenbay.app.network.Repository
 import com.greenbay.app.network.RetrofitInstance
 import kotlinx.coroutines.launch
+import org.json.JSONObject
 
 class AuthViewModel(application: Application) : AndroidViewModel(application) {
     private val repository = Repository(RetrofitInstance.getApiService())
@@ -30,10 +33,14 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
             val response = repository.login(LoginModel(email, password))
             if (response.status == 200) {
                 loginStatus = MutableLiveData(true)
+                val json=JSONObject(response.data.toString())
+                Log.i("AuthViewModel", "login: ${json.getString("accessToken")}")
                 with(prefs.edit()) {
                     putString("accessToken", response.data.toString())
                     apply()
                 }
+            }else{
+                loginStatus=MutableLiveData(false)
             }
         }
         return loginStatus

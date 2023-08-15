@@ -8,8 +8,8 @@ import java.util.concurrent.TimeUnit
 
 class RetrofitInstance {
     companion object {
-        private lateinit var retrofit: Retrofit
-        private const val baseUrl = ""
+        private var retrofit: Retrofit?=null
+        private const val baseUrl = "https://ae1b-41-80-116-151.ngrok-free.app"
 
         @JvmStatic
         fun getRetrofitInstance(): Retrofit {
@@ -20,7 +20,7 @@ class RetrofitInstance {
                     .client(getOkHttpClient())
                     .build()
             }
-            return retrofit
+            return retrofit!!
 
         }
 

@@ -101,7 +101,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
             if (response.status == 200) {
                 task.value = response.data as Task
             } else {
-                task.value = Task("", "", "", 0, 0, "", 0, false)
+                task.value = Task("", "", "", 0, 0, "",  false)
             }
         }
         return task
