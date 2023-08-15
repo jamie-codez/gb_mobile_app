@@ -7,6 +7,7 @@ import com.greenbay.app.ui.home.models.Communication
 import com.greenbay.app.ui.home.models.CommunicationUpdate
 import com.greenbay.app.ui.home.models.Payment
 import com.greenbay.app.ui.home.models.PaymentUpdate
+import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header

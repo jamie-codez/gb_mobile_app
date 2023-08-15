@@ -33,10 +33,8 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
             val response = repository.login(LoginModel(email, password))
             if (response.status == 200) {
                 loginStatus = MutableLiveData(true)
-                val json=JSONObject(response.data.toString())
-                Log.i("AuthViewModel", "login: ${json.getString("accessToken")}")
                 with(prefs.edit()) {
-                    putString("accessToken", response.data.toString())
+                    putString("accessToken", JSONObject(response.data.toString()).getString("accessToken"))
                     apply()
                 }
             }else{

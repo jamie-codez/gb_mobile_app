@@ -2,6 +2,16 @@ package com.greenbay.app.ui.home.models
 
 import com.google.gson.annotations.SerializedName
 
+sealed class ApiResponse<out T>(
+    @SerializedName("status") val status: Int,
+    @SerializedName("message") val message: String,
+    @SerializedName("data") val data: T?,
+) {
+    data class Success<out T>(val response: T) : ApiResponse<T>(200, "Success", response)
+    data class Loading(val loading: Boolean) : ApiResponse<Nothing>(200, "Loading", null)
+    data class Error(val error: String) : ApiResponse<Nothing>(500, error, null)
+}
+
 data class Payment(
     @SerializedName("_id") val id: String?=null,
     @SerializedName("title") val title: String?,
