@@ -10,5 +10,7 @@ data class LoginModel(
 data class ResponseModel(
     @SerializedName("status") val status: Int,
     @SerializedName("message") val message: String,
-    @SerializedName("payload") val data: Any
-)
+    @SerializedName("payload") val data: Any?
+){
+    constructor():this(0,"",null)
+}

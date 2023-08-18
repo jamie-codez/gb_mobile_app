@@ -1,6 +1,7 @@
 package com.greenbay.app.network
 
 import com.greenbay.app.models.AppUser
+import com.greenbay.app.models.HouseListResponse
 import com.greenbay.app.models.LoginModel
 import com.greenbay.app.models.ResponseModel
 import com.greenbay.app.ui.home.models.Communication
@@ -19,17 +20,17 @@ import retrofit2.http.Path
 interface GreenBayService {
     //User Endpoints
     @POST("/login")
-    suspend fun login(@Body loginModel: LoginModel): ResponseModel
+    fun login(@Body loginModel: LoginModel): Call<ResponseModel>
 
     @GET("/user/{id}")
-    suspend fun getUser(): ResponseModel
+    fun getUser(): Call<ResponseModel>
 
     @PUT("/user/{id}")
-    suspend fun updateUser(
+    fun updateUser(
         @Header("access-token") token: String,
         @Path("id") id: String,
         @Body appUser: AppUser
-    ): ResponseModel
+    ): Call<ResponseModel>
 
     //Team Endpoints
 
@@ -38,10 +39,10 @@ interface GreenBayService {
         "Content-Type: application/json",
         "Accept: application/json"
     )
-    suspend fun getTenant(
+    fun getTenant(
         @Header("access-token") token: String,
         @Path("id") id: String
-    ): ResponseModel
+    ): Call<ResponseModel>
 
     // Task Endpoints
     @GET("/task/{id}")
@@ -49,30 +50,30 @@ interface GreenBayService {
         "Content-Type: application/json",
         "Accept: application/json"
     )
-    suspend fun getTask(
+    fun getTask(
         @Header("access-token") token: String,
         @Path("id") id: String
-    ): ResponseModel
+    ): Call<ResponseModel>
 
     @GET("/tasks/{page}")
     @Headers(
         "Content-Type: application/json",
         "Accept: application/json"
     )
-    suspend fun getTasks(
+    fun getTasks(
         @Header("access-token") token: String,
         @Path("page") page: Int
-    ): ResponseModel
+    ): Call<ResponseModel>
 
     //STK Push Endpoints
-    @GET("/stk-push/")
+    @POST("/stk-push/")
     @Headers(
         "Content-Type: application/json",
         "Accept: application/json"
     )
-    suspend fun getStkPush(
-        @Header("access-token") token: String,amount:Int
-    ): ResponseModel
+    fun getStkPush(
+        @Header("access-token") token: String, @Body amount: Int
+    ): Call<ResponseModel>
 
     // Payments Endpoints
     @GET("/payments/{email}/{page}")
@@ -80,42 +81,42 @@ interface GreenBayService {
         "Content-Type: application/json",
         "Accept: application/json"
     )
-    suspend fun getPayments(
+    fun getPayments(
         @Header("access-token") token: String,
         @Path("email") email: String,
         @Path("page") page: Int
-    ): ResponseModel
+    ): Call<ResponseModel>
 
     @POST("/payments")
     @Headers(
         "Content-Type: application/json",
         "Accept: application/json"
     )
-    suspend fun createPayment(
+    fun createPayment(
         @Header("access-token") token: String,
         @Body payment: Payment
-    ): ResponseModel
+    ): Call<ResponseModel>
 
     @PUT("/payments/{id}")
     @Headers(
         "Content-Type: application/json",
         "Accept: application/json"
     )
-    suspend fun updatePayment(
+    fun updatePayment(
         @Header("access-token") token: String,
         @Path("id") id: String,
         @Body payment: PaymentUpdate
-    ): ResponseModel
+    ): Call<ResponseModel>
 
     @GET("/payments/{id}")
     @Headers(
         "Content-Type: application/json",
         "Accept: application/json"
     )
-    suspend fun getPayment(
+    fun getPayment(
         @Header("access-token") token: String,
         @Path("id") id: String
-    ): ResponseModel
+    ): Call<ResponseModel>
 
     // House Endpoints
 
@@ -124,10 +125,10 @@ interface GreenBayService {
         "Content-Type: application/json",
         "Accept: application/json"
     )
-    suspend fun getHouse(
+    fun getHouse(
         @Header("access-token") token: String,
         @Path("id") id: String
-    ): ResponseModel
+    ): Call<ResponseModel>
 
     // Communication Endpoints
     @POST("/communications")
@@ -135,51 +136,51 @@ interface GreenBayService {
         "Content-Type: application/json",
         "Accept: application/json"
     )
-    suspend fun createCommunication(
+    fun createCommunication(
         @Header("access-token") token: String,
         @Body communication: Communication
-    ): ResponseModel
+    ): Call<ResponseModel>
 
     @GET("/communications/{page}")
     @Headers(
         "Content-Type: application/json",
         "Accept: application/json"
     )
-    suspend fun getCommunications(
+    fun getCommunications(
         @Header("access-token") token: String,
         @Path("page") page: Int
-    ): ResponseModel
+    ): Call<ResponseModel>
 
     @GET("/communications/{id}")
     @Headers(
         "Content-Type: application/json",
         "Accept: application/json"
     )
-    suspend fun getCommunication(
+    fun getCommunication(
         @Header("access-token") token: String,
         @Path("id") id: String
-    ): ResponseModel
+    ): Call<ResponseModel>
 
     @PUT("/communications/{id}")
     @Headers(
         "Content-Type: application/json",
         "Accept: application/json"
     )
-    suspend fun updateCommunication(
+    fun updateCommunication(
         @Header("access-token") token: String,
         @Path("id") id: String,
         @Body communicationUpdate: CommunicationUpdate
-    ): ResponseModel
+    ): Call<ResponseModel>
 
     @GET("houses/{page}")
     @Headers(
         "Content-Type: application/json",
         "Accept: application/json"
     )
-    suspend fun getHouses(
+    fun getHouses(
         @Header("access-token") token: String,
         @Path("page") page: Int
-    ): ResponseModel
+    ): Call<HouseListResponse>
 
 
 }

@@ -9,7 +9,7 @@ import java.util.concurrent.TimeUnit
 class RetrofitInstance {
     companion object {
         private var retrofit: Retrofit?=null
-        private const val baseUrl = "https://ae1b-41-80-116-151.ngrok-free.app"
+        private const val baseUrl = "https://ae30-41-80-116-87.ngrok-free.app"
 
         @JvmStatic
         fun getRetrofitInstance(): Retrofit {

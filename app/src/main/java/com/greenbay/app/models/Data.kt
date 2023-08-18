@@ -1,6 +1,7 @@
 package com.greenbay.app.models
 
 import com.google.gson.annotations.SerializedName
+import com.greenbay.app.ui.home.models.House
 
 class Comm(
     val id: String,
@@ -37,3 +38,8 @@ data class CommunicationListResponse(
     @SerializedName("payload") val data: List<Communication>
 )
 
+data class HouseListResponse(
+    @SerializedName("status") val status: Int,
+    @SerializedName("message") val message: String,
+    @SerializedName("payload") val data: List<House>
+)
