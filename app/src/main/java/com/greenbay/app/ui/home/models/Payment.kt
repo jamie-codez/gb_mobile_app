@@ -23,6 +23,18 @@ data class Payment(
     @SerializedName("verified") val verified: Boolean?,
 )
 
+data class PaymentResponse(
+    @SerializedName("status") val status: Int,
+    @SerializedName("message") val message: String,
+    @SerializedName("payload") val data: Payment
+)
+
+data class PaymentListResponse(
+    @SerializedName("status") val status: Int,
+    @SerializedName("message") val message: String,
+    @SerializedName("payload") val data: List<Payment>
+)
+
 data class PaymentUpdate(
     @SerializedName("from") val from: String?,
     @SerializedName("transactionCode") val transactionCode: String?,
@@ -44,6 +56,18 @@ data class CommunicationUpdate(
     @SerializedName("payload") val payload: Any?,
 )
 
+data class CommunicationResponse(
+    @SerializedName("status") val status: Int,
+    @SerializedName("message") val message: String,
+    @SerializedName("payload") val data: Communication
+)
+
+data class CommunicationListResponse(
+    @SerializedName("status") val status: Int,
+    @SerializedName("message") val message: String,
+    @SerializedName("payload") val data: List<Communication>
+)
+
 data class Task(
     @SerializedName("_id") val id: String?,
     @SerializedName("title") val title: String?,
@@ -53,6 +77,19 @@ data class Task(
     @SerializedName("createdOn") val createdOn: String,
     @SerializedName("status") val status: Boolean
 )
+
+data class TaskResponse(
+    @SerializedName("status") val status: Int,
+    @SerializedName("message") val message: String,
+    @SerializedName("payload") val data: Task
+)
+
+data class TaskListResponse(
+    @SerializedName("status") val status: Int,
+    @SerializedName("message") val message: String,
+    @SerializedName("payload") val data: List<Task>
+)
+
 
 data class Tenant(
     @SerializedName("_id") val id: String?,
@@ -64,6 +101,19 @@ data class Tenant(
     @SerializedName("rent") val rent: String?,
     @SerializedName("deposit") val deposit: String?,
     @SerializedName("floorNumber") val floorNumber: String?,
+)
+
+
+data class TenantResponse(
+    @SerializedName("status") val status: Int,
+    @SerializedName("message") val message: String,
+    @SerializedName("payload") val data: Tenant
+)
+
+data class TenantListResponse(
+    @SerializedName("status") val status: Int,
+    @SerializedName("message") val message: String,
+    @SerializedName("payload") val data: List<Tenant>
 )
 
 data class House(

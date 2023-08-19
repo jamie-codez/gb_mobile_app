@@ -43,3 +43,9 @@ data class HouseListResponse(
     @SerializedName("message") val message: String,
     @SerializedName("payload") val data: List<House>
 )
+
+data class HouseResponse(
+    @SerializedName("status") val status: Int,
+    @SerializedName("message") val message: String,
+    @SerializedName("payload") val data: House
+)

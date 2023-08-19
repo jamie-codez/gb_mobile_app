@@ -6,16 +6,24 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.greenbay.app.models.HouseListResponse
+import com.greenbay.app.models.HouseResponse
 import com.greenbay.app.models.ResponseModel
 import com.greenbay.app.network.Repository
 import com.greenbay.app.network.RetrofitInstance
 import com.greenbay.app.ui.home.models.Communication
+import com.greenbay.app.ui.home.models.CommunicationListResponse
+import com.greenbay.app.ui.home.models.CommunicationResponse
 import com.greenbay.app.ui.home.models.CommunicationUpdate
 import com.greenbay.app.ui.home.models.House
 import com.greenbay.app.ui.home.models.Payment
+import com.greenbay.app.ui.home.models.PaymentListResponse
+import com.greenbay.app.ui.home.models.PaymentResponse
 import com.greenbay.app.ui.home.models.PaymentUpdate
 import com.greenbay.app.ui.home.models.Task
+import com.greenbay.app.ui.home.models.TaskListResponse
+import com.greenbay.app.ui.home.models.TaskResponse
 import com.greenbay.app.ui.home.models.Tenant
+import com.greenbay.app.ui.home.models.TenantResponse
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
@@ -34,19 +42,19 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
         val communications = MutableLiveData<List<Communication>>()
         viewModelScope.launch {
             repository.getCommunications(accessToken, "1")
-                .enqueue(object : Callback<ResponseModel> {
+                .enqueue(object : Callback<CommunicationListResponse> {
                     override fun onResponse(
-                        call: retrofit2.Call<ResponseModel>,
-                        response: retrofit2.Response<ResponseModel>
+                        call: Call<CommunicationListResponse>,
+                        response: Response<CommunicationListResponse>
                     ) {
                         if (response.code() == 200) {
-                            communications.value = response.body()?.data as List<Communication>
+                            communications.value = response.body()?.data
                         } else {
                             communications.value = listOf()
                         }
                     }
 
-                    override fun onFailure(call: retrofit2.Call<ResponseModel>, t: Throwable) {
+                    override fun onFailure(call: Call<CommunicationListResponse>, t: Throwable) {
                         communications.value = listOf()
                     }
 
@@ -59,10 +67,10 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
         val communication = MutableLiveData<Communication>()
         viewModelScope.launch {
             repository.getCommunication(accessToken, id)
-                .enqueue(object : Callback<ResponseModel> {
+                .enqueue(object : Callback<CommunicationResponse> {
                     override fun onResponse(
-                        call: retrofit2.Call<ResponseModel>,
-                        response: retrofit2.Response<ResponseModel>
+                        call: Call<CommunicationResponse>,
+                        response: Response<CommunicationResponse>
                     ) {
                         if (response.code() == 200) {
                             communication.value = response.body()?.data as Communication
@@ -71,7 +79,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
                         }
                     }
 
-                    override fun onFailure(call: retrofit2.Call<ResponseModel>, t: Throwable) {
+                    override fun onFailure(call: Call<CommunicationResponse>, t: Throwable) {
                         communication.value = Communication("", "", "", "", "", "", 0)
                     }
 
@@ -86,8 +94,8 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
             repository.createCommunication(accessToken, communication)
                 .enqueue(object : Callback<ResponseModel> {
                     override fun onResponse(
-                        call: retrofit2.Call<ResponseModel>,
-                        response: retrofit2.Response<ResponseModel>
+                        call: Call<ResponseModel>,
+                        response: Response<ResponseModel>
                     ) {
                         if (response.code() == 200) {
                             comm.value = response.body()?.data as Communication
@@ -96,7 +104,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
                         }
                     }
 
-                    override fun onFailure(call: retrofit2.Call<ResponseModel>, t: Throwable) {
+                    override fun onFailure(call: Call<ResponseModel>, t: Throwable) {
                         comm.value = Communication("", "", "", "", "", "", 0)
                     }
                 })
@@ -113,8 +121,8 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
             repository.updateCommunication(accessToken, id, communicationUpdate)
                 .enqueue(object : Callback<ResponseModel> {
                     override fun onResponse(
-                        call: retrofit2.Call<ResponseModel>,
-                        response: retrofit2.Response<ResponseModel>
+                        call: Call<ResponseModel>,
+                        response: Response<ResponseModel>
                     ) {
                         if (response.code() == 200) {
                             updateCommunication.value = response.body()?.data as Communication
@@ -123,7 +131,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
                         }
                     }
 
-                    override fun onFailure(call: retrofit2.Call<ResponseModel>, t: Throwable) {
+                    override fun onFailure(call: Call<ResponseModel>, t: Throwable) {
                         updateCommunication.value = Communication("", "", "", "", "", "", 0)
                     }
                 })
@@ -134,19 +142,19 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
     fun getTasks(): MutableLiveData<List<Task>> {
         val tasks = MutableLiveData<List<Task>>()
         viewModelScope.launch {
-            repository.getTasks(accessToken, "1").enqueue(object : Callback<ResponseModel> {
+            repository.getTasks(accessToken, "1").enqueue(object : Callback<TaskListResponse> {
                 override fun onResponse(
-                    call: retrofit2.Call<ResponseModel>,
-                    response: retrofit2.Response<ResponseModel>
+                    call: Call<TaskListResponse>,
+                    response: Response<TaskListResponse>
                 ) {
                     if (response.code() == 200) {
-                        tasks.value = response.body()?.data as List<Task>
+                        tasks.value = response.body()?.data
                     } else {
                         tasks.value = listOf()
                     }
                 }
 
-                override fun onFailure(call: retrofit2.Call<ResponseModel>, t: Throwable) {
+                override fun onFailure(call: Call<TaskListResponse>, t: Throwable) {
                     tasks.value = listOf()
                 }
             })
@@ -157,10 +165,10 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
     fun getTask(id: String): MutableLiveData<Task> {
         val task = MutableLiveData<Task>()
         viewModelScope.launch {
-            repository.getTask(accessToken, id).enqueue(object : Callback<ResponseModel> {
+            repository.getTask(accessToken, id).enqueue(object : Callback<TaskResponse> {
                 override fun onResponse(
-                    call: retrofit2.Call<ResponseModel>,
-                    response: retrofit2.Response<ResponseModel>
+                    call: Call<TaskResponse>,
+                    response: Response<TaskResponse>
                 ) {
                     if (response.code() == 200) {
                         task.value = response.body()?.data as Task
@@ -169,7 +177,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
                     }
                 }
 
-                override fun onFailure(call: retrofit2.Call<ResponseModel>, t: Throwable) {
+                override fun onFailure(call: Call<TaskResponse>, t: Throwable) {
                     task.value = Task("", "", "", 0, 0, "", false)
                 }
             })
@@ -181,19 +189,19 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
         val payments = MutableLiveData<List<Payment>>()
         viewModelScope.launch {
             repository.getPayments(accessToken, email, "1")
-                .enqueue(object : Callback<ResponseModel> {
+                .enqueue(object : Callback<PaymentListResponse> {
                     override fun onResponse(
-                        call: retrofit2.Call<ResponseModel>,
-                        response: retrofit2.Response<ResponseModel>
+                        call: Call<PaymentListResponse>,
+                        response: Response<PaymentListResponse>
                     ) {
                         if (response.code() == 200) {
-                            payments.value = response.body()?.data as List<Payment>
+                            payments.value = response.body()?.data
                         } else {
                             payments.value = listOf()
                         }
                     }
 
-                    override fun onFailure(call: retrofit2.Call<ResponseModel>, t: Throwable) {
+                    override fun onFailure(call: Call<PaymentListResponse>, t: Throwable) {
                         payments.value = listOf()
                     }
                 })
@@ -205,10 +213,10 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
         val payment = MutableLiveData<Payment>()
         viewModelScope.launch {
 
-            repository.getPayment(accessToken, id).enqueue(object : Callback<ResponseModel> {
+            repository.getPayment(accessToken, id).enqueue(object : Callback<PaymentResponse> {
                 override fun onResponse(
-                    call: retrofit2.Call<ResponseModel>,
-                    response: retrofit2.Response<ResponseModel>
+                    call: Call<PaymentResponse>,
+                    response: Response<PaymentResponse>
                 ) {
                     if (response.code() == 200) {
                         payment.value = response.body()?.data as Payment
@@ -217,7 +225,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
                     }
                 }
 
-                override fun onFailure(call: retrofit2.Call<ResponseModel>, t: Throwable) {
+                override fun onFailure(call: Call<PaymentResponse>, t: Throwable) {
                     payment.value = Payment("", "", "", "", "", "", 0, false)
                 }
             })
@@ -231,8 +239,8 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
             repository.getStkPush(accessToken, amount)
                 .enqueue(object : Callback<ResponseModel> {
                     override fun onResponse(
-                        call: retrofit2.Call<ResponseModel>,
-                        response: retrofit2.Response<ResponseModel>
+                        call: Call<ResponseModel>,
+                        response: Response<ResponseModel>
                     ) {
                         if (response.code() == 200) {
                             stkResponse.value = response.body() as ResponseModel
@@ -241,7 +249,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
                         }
                     }
 
-                    override fun onFailure(call: retrofit2.Call<ResponseModel>, t: Throwable) {
+                    override fun onFailure(call: Call<ResponseModel>, t: Throwable) {
                         stkResponse.value = ResponseModel(0, "", "")
                     }
                 })
@@ -255,8 +263,8 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
             repository.createPayment(accessToken, payment)
                 .enqueue(object : Callback<ResponseModel> {
                     override fun onResponse(
-                        call: retrofit2.Call<ResponseModel>,
-                        response: retrofit2.Response<ResponseModel>
+                        call: Call<ResponseModel>,
+                        response: Response<ResponseModel>
                     ) {
                         if (response.code() == 200) {
                             pay.value = response.body()?.data as Payment
@@ -265,7 +273,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
                         }
                     }
 
-                    override fun onFailure(call: retrofit2.Call<ResponseModel>, t: Throwable) {
+                    override fun onFailure(call: Call<ResponseModel>, t: Throwable) {
                         pay.value = Payment("", "", "", "", "", "", 0, false)
                     }
                 })
@@ -279,8 +287,8 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
             repository.updatePayment(accessToken, id, paymentUpdate)
                 .enqueue(object : Callback<ResponseModel> {
                     override fun onResponse(
-                        call: retrofit2.Call<ResponseModel>,
-                        response: retrofit2.Response<ResponseModel>
+                        call: Call<ResponseModel>,
+                        response: Response<ResponseModel>
                     ) {
                         if (response.code() == 200) {
                             updatePayment.value = response.body()?.data as Payment
@@ -289,7 +297,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
                         }
                     }
 
-                    override fun onFailure(call: retrofit2.Call<ResponseModel>, t: Throwable) {
+                    override fun onFailure(call: Call<ResponseModel>, t: Throwable) {
                         updatePayment.value = Payment("", "", "", "", "", "", 0, false)
                     }
                 })
@@ -301,10 +309,10 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
         val tenant = MutableLiveData<Tenant>()
         viewModelScope.launch {
 
-            repository.getTenant(accessToken, id).enqueue(object : Callback<ResponseModel> {
+            repository.getTenant(accessToken, id).enqueue(object : Callback<TenantResponse> {
                 override fun onResponse(
-                    call: retrofit2.Call<ResponseModel>,
-                    response: retrofit2.Response<ResponseModel>
+                    call: Call<TenantResponse>,
+                    response: Response<TenantResponse>
                 ) {
                     if (response.code() == 200) {
                         tenant.value = response.body()?.data as Tenant
@@ -313,7 +321,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
                     }
                 }
 
-                override fun onFailure(call: retrofit2.Call<ResponseModel>, t: Throwable) {
+                override fun onFailure(call: Call<TenantResponse>, t: Throwable) {
                     tenant.value = Tenant("", "", "", "", "", "", "", "", "")
                 }
             })
@@ -325,19 +333,19 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
         val house = MutableLiveData<House>()
         viewModelScope.launch {
 
-            repository.getHouse(accessToken, id).enqueue(object : Callback<ResponseModel> {
+            repository.getHouse(accessToken, id).enqueue(object : Callback<HouseResponse> {
                 override fun onResponse(
-                    call: retrofit2.Call<ResponseModel>,
-                    response: retrofit2.Response<ResponseModel>
+                    call: Call<HouseResponse>,
+                    response: Response<HouseResponse>
                 ) {
                     if (response.code() == 200) {
-                        house.value = response.body()?.data as House
+                        house.value = response.body()?.data
                     } else {
                         house.value = House("", "", "", "", "", "", "", false)
                     }
                 }
 
-                override fun onFailure(call: retrofit2.Call<ResponseModel>, t: Throwable) {
+                override fun onFailure(call: Call<HouseResponse>, t: Throwable) {
                     house.value = House("", "", "", "", "", "", "", false)
                 }
             })

@@ -1,13 +1,22 @@
 package com.greenbay.app.network
 
 import com.greenbay.app.models.AppUser
+import com.greenbay.app.models.AppUserResponse
+import com.greenbay.app.models.CommunicationListResponse
 import com.greenbay.app.models.HouseListResponse
+import com.greenbay.app.models.HouseResponse
 import com.greenbay.app.models.LoginModel
 import com.greenbay.app.models.ResponseModel
 import com.greenbay.app.ui.home.models.Communication
+import com.greenbay.app.ui.home.models.CommunicationResponse
 import com.greenbay.app.ui.home.models.CommunicationUpdate
 import com.greenbay.app.ui.home.models.Payment
+import com.greenbay.app.ui.home.models.PaymentListResponse
+import com.greenbay.app.ui.home.models.PaymentResponse
 import com.greenbay.app.ui.home.models.PaymentUpdate
+import com.greenbay.app.ui.home.models.TaskListResponse
+import com.greenbay.app.ui.home.models.TaskResponse
+import com.greenbay.app.ui.home.models.TenantResponse
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -23,7 +32,7 @@ interface GreenBayService {
     fun login(@Body loginModel: LoginModel): Call<ResponseModel>
 
     @GET("/user/{id}")
-    fun getUser(): Call<ResponseModel>
+    fun getUser(): Call<AppUserResponse>
 
     @PUT("/user/{id}")
     fun updateUser(
@@ -42,7 +51,7 @@ interface GreenBayService {
     fun getTenant(
         @Header("access-token") token: String,
         @Path("id") id: String
-    ): Call<ResponseModel>
+    ): Call<TenantResponse>
 
     // Task Endpoints
     @GET("/task/{id}")
@@ -53,7 +62,7 @@ interface GreenBayService {
     fun getTask(
         @Header("access-token") token: String,
         @Path("id") id: String
-    ): Call<ResponseModel>
+    ): Call<TaskResponse>
 
     @GET("/tasks/{page}")
     @Headers(
@@ -63,7 +72,7 @@ interface GreenBayService {
     fun getTasks(
         @Header("access-token") token: String,
         @Path("page") page: Int
-    ): Call<ResponseModel>
+    ): Call<TaskListResponse>
 
     //STK Push Endpoints
     @POST("/stk-push/")
@@ -85,7 +94,7 @@ interface GreenBayService {
         @Header("access-token") token: String,
         @Path("email") email: String,
         @Path("page") page: Int
-    ): Call<ResponseModel>
+    ): Call<PaymentListResponse>
 
     @POST("/payments")
     @Headers(
@@ -116,7 +125,7 @@ interface GreenBayService {
     fun getPayment(
         @Header("access-token") token: String,
         @Path("id") id: String
-    ): Call<ResponseModel>
+    ): Call<PaymentResponse>
 
     // House Endpoints
 
@@ -128,7 +137,7 @@ interface GreenBayService {
     fun getHouse(
         @Header("access-token") token: String,
         @Path("id") id: String
-    ): Call<ResponseModel>
+    ): Call<HouseResponse>
 
     // Communication Endpoints
     @POST("/communications")
@@ -149,7 +158,7 @@ interface GreenBayService {
     fun getCommunications(
         @Header("access-token") token: String,
         @Path("page") page: Int
-    ): Call<ResponseModel>
+    ): Call<com.greenbay.app.ui.home.models.CommunicationListResponse>
 
     @GET("/communications/{id}")
     @Headers(
@@ -159,7 +168,7 @@ interface GreenBayService {
     fun getCommunication(
         @Header("access-token") token: String,
         @Path("id") id: String
-    ): Call<ResponseModel>
+    ): Call<CommunicationResponse>
 
     @PUT("/communications/{id}")
     @Headers(

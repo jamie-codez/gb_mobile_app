@@ -11,6 +11,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.greenbay.app.R
 import com.greenbay.app.models.AppUser
+import com.greenbay.app.models.AppUserResponse
 import com.greenbay.app.models.LoginModel
 import com.greenbay.app.models.ResponseModel
 import com.greenbay.app.network.Repository
@@ -75,10 +76,10 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
         val accessToken = prefs.getString("accessToken", "")
         if (!accessToken.isNullOrEmpty()) {
             viewModelScope.launch {
-                repository.getUser().enqueue(object : Callback<ResponseModel> {
+                repository.getUser().enqueue(object : Callback<AppUserResponse> {
                     override fun onResponse(
-                        call: Call<ResponseModel>,
-                        response: Response<ResponseModel>
+                        call: Call<AppUserResponse>,
+                        response: Response<AppUserResponse>
                     ) {
                         if (response.code() == 200) {
                             val user = response.body()?.data as AppUser
@@ -102,7 +103,7 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
                         }
                     }
 
-                    override fun onFailure(call: Call<ResponseModel>, t: Throwable) {
+                    override fun onFailure(call: Call<AppUserResponse>, t: Throwable) {
                         appUser = MutableLiveData()
                     }
                 })
