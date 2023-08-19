@@ -166,12 +166,12 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
                         if (response.code() == 200) {
                             task.value = response.body()?.data as Task
                         } else {
-                            task.value = Task("", "", "", 0, 0, "", 0, false)
+                            task.value = Task("", "", "", 0, 0, "",  false)
                         }
                     }
 
                     override fun onFailure(call: retrofit2.Call<ResponseModel>, t: Throwable) {
-                        task.value = Task("", "", "", 0, 0, "", 0, false)
+                        task.value = Task("", "", "", 0, 0, "",  false)
                     }
                 })
         }

@@ -51,8 +51,7 @@ data class Task(
     @SerializedName("scheduledDate") val scheduledDate: Long?,
     @SerializedName("createdBy") val createdBy: Int,
     @SerializedName("createdOn") val createdOn: String,
-    @SerializedName("status") val status: Int,
-    val b: Boolean,
+    @SerializedName("status") val status: Boolean
 )
 
 data class Tenant(
