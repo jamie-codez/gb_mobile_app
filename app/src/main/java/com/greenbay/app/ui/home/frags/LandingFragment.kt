@@ -34,7 +34,11 @@ class LandingFragment : Fragment() {
         housesRecyclerView.adapter = HouseAdapter(listOf())
 
         viewModel.getHouses().observe(viewLifecycleOwner) {
-            (housesRecyclerView.adapter as HouseAdapter).setHouses(it)
+            if (it != null) {
+                (housesRecyclerView.adapter as HouseAdapter).setHouses(it)
+            }else {
+                (housesRecyclerView.adapter as HouseAdapter).setHouses(listOf())
+            }
         }
     }
 

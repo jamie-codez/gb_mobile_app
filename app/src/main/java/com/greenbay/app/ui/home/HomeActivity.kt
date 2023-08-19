@@ -24,6 +24,7 @@ class HomeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        setSupportActionBar(binding.homeToolbar)
         val appBarConfiguration = androidx.navigation.ui.AppBarConfiguration(
             setOf(
                 R.id.landingFragment,

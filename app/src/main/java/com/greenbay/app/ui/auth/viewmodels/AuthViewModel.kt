@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -32,8 +33,7 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
     fun login(email: String, password: String): LiveData<Boolean> {
         viewModelScope.launch {
-            val response = repository.login(LoginModel(email, password))
-                .enqueue(object : Callback<ResponseModel> {
+            repository.login(LoginModel(email,password)).enqueue (object: Callback<ResponseModel> {
                     override fun onResponse(
                         call: Call<ResponseModel>,
                         response: Response<ResponseModel>
@@ -75,7 +75,7 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
         val accessToken = prefs.getString("accessToken", "")
         if (!accessToken.isNullOrEmpty()) {
             viewModelScope.launch {
-                val response = repository.getUser().enqueue(object : Callback<ResponseModel> {
+                repository.getUser().enqueue(object : Callback<ResponseModel> {
                     override fun onResponse(
                         call: Call<ResponseModel>,
                         response: Response<ResponseModel>
