@@ -37,9 +37,23 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
     )
     private val accessToken = pref.getString("accessToken", "")!!
     val email = pref.getString("email", "")!!
+    val communications = MutableLiveData<List<Communication>>()
+    val communication = MutableLiveData<Communication>()
+    val comm = MutableLiveData<Communication>()
+    val updateCommunication = MutableLiveData<Communication>()
+    val tasks = MutableLiveData<List<Task>>()
+    val task = MutableLiveData<Task>()
+    val payments = MutableLiveData<List<Payment>>()
+    val payment = MutableLiveData<Payment>()
+    val stkResponse = MutableLiveData<ResponseModel>()
+    val pay = MutableLiveData<Payment>()
+    val updatePayment = MutableLiveData<Payment>()
+    val tenant = MutableLiveData<Tenant>()
+    val houses = MutableLiveData<List<House>?>()
+    val house = MutableLiveData<House>()
+
 
     fun getCommunications(): MutableLiveData<List<Communication>> {
-        val communications = MutableLiveData<List<Communication>>()
         viewModelScope.launch {
             repository.getCommunications(accessToken, "1")
                 .enqueue(object : Callback<CommunicationListResponse> {
@@ -64,7 +78,6 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun getCommunication(id: String): MutableLiveData<Communication> {
-        val communication = MutableLiveData<Communication>()
         viewModelScope.launch {
             repository.getCommunication(accessToken, id)
                 .enqueue(object : Callback<CommunicationResponse> {
@@ -89,7 +102,6 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun createCommunication(communication: Communication): MutableLiveData<Communication> {
-        val comm = MutableLiveData<Communication>()
         viewModelScope.launch {
             repository.createCommunication(accessToken, communication)
                 .enqueue(object : Callback<ResponseModel> {
@@ -116,7 +128,6 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
         id: String,
         communicationUpdate: CommunicationUpdate
     ): MutableLiveData<Communication> {
-        val updateCommunication = MutableLiveData<Communication>()
         viewModelScope.launch {
             repository.updateCommunication(accessToken, id, communicationUpdate)
                 .enqueue(object : Callback<ResponseModel> {
@@ -140,7 +151,6 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun getTasks(): MutableLiveData<List<Task>> {
-        val tasks = MutableLiveData<List<Task>>()
         viewModelScope.launch {
             repository.getTasks(accessToken, "1").enqueue(object : Callback<TaskListResponse> {
                 override fun onResponse(
@@ -163,7 +173,6 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun getTask(id: String): MutableLiveData<Task> {
-        val task = MutableLiveData<Task>()
         viewModelScope.launch {
             repository.getTask(accessToken, id).enqueue(object : Callback<TaskResponse> {
                 override fun onResponse(
@@ -186,7 +195,6 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun getPayments(): MutableLiveData<List<Payment>> {
-        val payments = MutableLiveData<List<Payment>>()
         viewModelScope.launch {
             repository.getPayments(accessToken, email, "1")
                 .enqueue(object : Callback<PaymentListResponse> {
@@ -210,9 +218,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun getPayment(id: String): MutableLiveData<Payment> {
-        val payment = MutableLiveData<Payment>()
         viewModelScope.launch {
-
             repository.getPayment(accessToken, id).enqueue(object : Callback<PaymentResponse> {
                 override fun onResponse(
                     call: Call<PaymentResponse>,
@@ -234,7 +240,6 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun getStkPush(amount: Int): MutableLiveData<ResponseModel> {
-        val stkResponse = MutableLiveData<ResponseModel>()
         viewModelScope.launch {
             repository.getStkPush(accessToken, amount)
                 .enqueue(object : Callback<ResponseModel> {
@@ -258,7 +263,6 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun createPayment(payment: Payment): MutableLiveData<Payment> {
-        val pay = MutableLiveData<Payment>()
         viewModelScope.launch {
             repository.createPayment(accessToken, payment)
                 .enqueue(object : Callback<ResponseModel> {
@@ -282,7 +286,6 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun updatePayment(id: String, paymentUpdate: PaymentUpdate): MutableLiveData<Payment> {
-        val updatePayment = MutableLiveData<Payment>()
         viewModelScope.launch {
             repository.updatePayment(accessToken, id, paymentUpdate)
                 .enqueue(object : Callback<ResponseModel> {
@@ -306,9 +309,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun getTenant(id: String): MutableLiveData<Tenant> {
-        val tenant = MutableLiveData<Tenant>()
         viewModelScope.launch {
-
             repository.getTenant(accessToken, id).enqueue(object : Callback<TenantResponse> {
                 override fun onResponse(
                     call: Call<TenantResponse>,
@@ -330,9 +331,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun getHouse(id: String): MutableLiveData<House> {
-        val house = MutableLiveData<House>()
         viewModelScope.launch {
-
             repository.getHouse(accessToken, id).enqueue(object : Callback<HouseResponse> {
                 override fun onResponse(
                     call: Call<HouseResponse>,
@@ -354,9 +353,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun getHouses(): MutableLiveData<List<House>?> {
-        val houses = MutableLiveData<List<House>?>()
         viewModelScope.launch {
-
             repository.getHouses(accessToken, "1").enqueue(object : Callback<HouseListResponse> {
                 override fun onResponse(
                     call: Call<HouseListResponse>,

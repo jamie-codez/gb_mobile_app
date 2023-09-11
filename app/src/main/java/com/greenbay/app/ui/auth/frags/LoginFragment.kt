@@ -53,41 +53,41 @@ class LoginFragment : Fragment() {
             }
         }
         binding.loginBtn.setOnClickListener {
-            binding.loginBtn.isEnabled = false
-            binding.loginBtn.text = "Please wait..."
-            binding.progressBar.visibility = VISIBLE
+            it.isEnabled = false
+            binding.progressBar.visibility= VISIBLE
+            binding.loginBtn.text = getString(R.string.please_wait)
             val email = binding.loginEmailEt.text.toString().trim()
             val password = binding.loginPasswordEt.text.toString().trim()
             if (email.isEmpty()) {
                 binding.loginBtn.isEnabled = true
                 binding.loginEmailEtl.error = "Email is required"
-                binding.loginBtn.text = "Login"
+                binding.loginBtn.text = getString(R.string.login)
                 binding.progressBar.visibility = INVISIBLE
                 return@setOnClickListener
             }
-            if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-                binding.loginBtn.isEnabled = true
+            if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                it.isEnabled = true
                 binding.loginEmailEtl.error = "Invalid email address"
-                binding.loginBtn.text = "Login"
+                binding.loginBtn.text = getString(R.string.login)
                 binding.progressBar.visibility = INVISIBLE
                 return@setOnClickListener
             }
             if (password.isEmpty()) {
                 binding.loginBtn.isEnabled = true
                 binding.loginPasswordEtl.error = "Password is required"
-                binding.loginBtn.text = "Login"
+                binding.loginBtn.text = getString(R.string.login)
                 binding.progressBar.visibility = INVISIBLE
                 return@setOnClickListener
             }
-            viewModel.login(email, password).observe(viewLifecycleOwner) {
-                if (it) {
-                    binding.loginBtn.isEnabled = true
-                    binding.loginBtn.text = "Login"
+            viewModel.login(email, password).observe(viewLifecycleOwner) {isLoggesIn->
+                if (isLoggesIn) {
+                    it.isEnabled = true
+                    binding.loginBtn.text = getString(R.string.login)
                     binding.progressBar.visibility = INVISIBLE
                     navController.navigate(R.id.action_loginFragment_to_homeActivity)
                 } else {
-                    binding.loginBtn.isEnabled = true
-                    binding.loginBtn.text = "Login"
+                    it.isEnabled = true
+                    binding.loginBtn.text = getString(R.string.login)
                     binding.progressBar.visibility = INVISIBLE
                 }
             }

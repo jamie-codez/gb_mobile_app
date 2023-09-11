@@ -12,4 +12,6 @@
     <string name="profile">Profile</string>
     <string name="home">Home</string>
     <string name="amount">Amount</string>
+    <string name="please_wait">Please wait...</string>
+    <string name="login">Login</string>
 </resources>
