@@ -29,6 +29,25 @@
                 android:layout_height="wrap_content"
                 android:inputType="numberDecimal" />
         </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/phone_number_etl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="30dp"
+            android:hint="@string/optional_phone_number"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/dialog_amount_etl"
+            app:startIconDrawable="@drawable/phone">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/phone_number_et"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal" />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <Button
             android:id="@+id/dialog_pay_btn"
@@ -36,6 +55,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="40dp"
             android:layout_marginTop="20dp"
+            android:enabled="true"
             android:layout_marginEnd="40dp"
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginBottom="20dp"
@@ -44,6 +64,15 @@
             android:drawableTint="@color/white"
             android:gravity="center_vertical|center_horizontal"
             android:text="Pay"
-            app:layout_constraintTop_toBottomOf="@id/dialog_amount_etl" />
+            app:layout_constraintTop_toBottomOf="@id/phone_number_etl" />
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/payments_progress_bar"
+            app:layout_constraintBottom_toBottomOf="@+id/dialog_pay_btn"
+            app:layout_constraintEnd_toEndOf="@+id/dialog_pay_btn"
+            app:layout_constraintStart_toStartOf="@+id/dialog_pay_btn"
+            app:layout_constraintTop_toTopOf="@+id/dialog_pay_btn" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

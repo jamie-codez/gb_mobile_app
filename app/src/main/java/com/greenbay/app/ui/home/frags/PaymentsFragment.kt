@@ -48,34 +48,49 @@ class PaymentsFragment : Fragment() {
             alertDialogBuilder.setTitle("Make Payment")
             alertDialogBuilder.setView(binding.root)
             binding.dialogPayBtn.setOnClickListener {
-                binding.dialogPayBtn.isEnabled = false
-                binding.dialogPayBtn.text = "Processing..."
+                binding.apply {
+                    paymentsProgressBar.visibility = View.VISIBLE
+                    dialogPayBtn.isEnabled=false
+                    dialogPayBtn.text = "Processing..."
+                }
                 val amnt = binding.dialogAmountEt.text.toString()
                 if (amnt.isEmpty()) {
-                    binding.dialogAmountEtl.error = "Amount is required"
-                    binding.dialogPayBtn.isEnabled = true
-                    binding.dialogPayBtn.text = "Pay"
+                    binding.apply {
+                        dialogAmountEt.error = "Amount is required"
+                        paymentsProgressBar.visibility = View.GONE
+                        dialogPayBtn.isEnabled=true
+                        dialogPayBtn.text = "Pay"
+                    }
                     return@setOnClickListener
                 }
                 val amount = amnt.toDouble()
                 if (amount < 1) {
-                    binding.dialogAmountEt.error = "Amount must be greater than 0"
-                    binding.dialogPayBtn.isEnabled = true
-                    binding.dialogPayBtn.text = "Pay"
+                    binding.apply {
+                        dialogAmountEt.error = "Amount must be greater than 0"
+                        paymentsProgressBar.visibility = View.GONE
+                        dialogPayBtn.isEnabled=true
+                        dialogPayBtn.text = "Pay"
+                    }
                     return@setOnClickListener
                 }
                 viewModel.getStkPush(ceil(amount).toInt()).observe(viewLifecycleOwner) {
                     if (it.status == 200) {
                         Snackbar.make(binding.root, "Payment request sent", Snackbar.LENGTH_LONG)
                             .show()
-                        binding.dialogPayBtn.isEnabled = true
-                        binding.dialogPayBtn.text = "Pay"
+                        binding.apply {
+                            paymentsProgressBar.visibility = View.GONE
+                            dialogPayBtn.isEnabled=true
+                            dialogPayBtn.text = "Pay"
+                        }
                         alertDialogBuilder.create().dismiss()
                     } else {
                         Snackbar.make(binding.root, "Payment request failed", Snackbar.LENGTH_LONG)
                             .show()
-                        binding.dialogPayBtn.isEnabled = true
-                        binding.dialogPayBtn.text = "Pay"
+                        binding.apply {
+                            paymentsProgressBar.visibility = View.GONE
+                            dialogPayBtn.isEnabled=true
+                            dialogPayBtn.text = "Pay"
+                        }
                     }
                 }
             }
