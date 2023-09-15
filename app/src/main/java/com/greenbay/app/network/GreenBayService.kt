@@ -32,7 +32,7 @@ interface GreenBayService {
     fun login(@Body loginModel: LoginModel): Call<ResponseModel>
 
     @GET("/user/{id}")
-    fun getUser(): Call<AppUserResponse>
+    fun getUser(@Path("id") id: String): Call<AppUserResponse>
 
     @PUT("/user/{id}")
     fun updateUser(

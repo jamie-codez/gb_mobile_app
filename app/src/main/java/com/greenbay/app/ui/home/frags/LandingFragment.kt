@@ -28,16 +28,36 @@ class LandingFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val housesRecyclerView = binding.homeHousesListRv
+        binding.apply {
+            homeHousesListRv.visibility = View.GONE
+            housesProgressBar.visibility = View.VISIBLE
+            housesLoadingTv.visibility = View.VISIBLE
+            noItemsIvHouses.visibility = View.GONE
+            noItemsTvHouses.visibility = View.GONE
+        }
+        val houseAdapter = HouseAdapter(listOf())
         housesRecyclerView.setHasFixedSize(true)
         housesRecyclerView.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        housesRecyclerView.adapter = HouseAdapter(listOf())
-
+        housesRecyclerView.adapter = houseAdapter
         viewModel.getHouses().observe(viewLifecycleOwner) {
-            if (it != null) {
-                (housesRecyclerView.adapter as HouseAdapter).setHouses(it)
+            if (it!!.isEmpty()) {
+                binding.apply {
+                    homeHousesListRv.visibility = View.GONE
+                    housesProgressBar.visibility = View.GONE
+                    housesLoadingTv.visibility = View.GONE
+                    noItemsIvHouses.visibility = View.VISIBLE
+                    noItemsTvHouses.visibility = View.VISIBLE
+                }
             }else {
-                (housesRecyclerView.adapter as HouseAdapter).setHouses(listOf())
+                binding.apply {
+                    homeHousesListRv.visibility = View.VISIBLE
+                    housesProgressBar.visibility = View.GONE
+                    housesLoadingTv.visibility = View.GONE
+                    noItemsIvHouses.visibility = View.GONE
+                    noItemsTvHouses.visibility = View.GONE
+                }
+                houseAdapter.setHouses(listOf())
             }
         }
     }

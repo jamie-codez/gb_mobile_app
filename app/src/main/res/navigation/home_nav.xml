@@ -28,6 +28,6 @@
     <fragment
         android:id="@+id/paymentsFragment"
         android:name="com.greenbay.app.ui.home.frags.PaymentsFragment"
-        android:label="fragment_payments"
+        android:label="Payments"
         tools:layout="@layout/fragment_payments" />
 </navigation>

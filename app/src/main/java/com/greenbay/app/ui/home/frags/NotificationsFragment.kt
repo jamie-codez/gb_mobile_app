@@ -1,16 +1,17 @@
 package com.greenbay.app.ui.home.frags
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.core.widget.doOnTextChanged
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.greenbay.app.R
 import com.greenbay.app.databinding.AddNotificationDialogBinding
-import com.greenbay.app.databinding.FragmentLandingBinding
 import com.greenbay.app.databinding.FragmentNotificationsBinding
 import com.greenbay.app.ui.home.adapters.NotificationsAdapter
 import com.greenbay.app.ui.home.models.Communication
@@ -34,6 +35,11 @@ class NotificationsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val email = viewModel.email
+        binding.apply {
+            notificationsProgressBar.visibility = VISIBLE
+            notificationsLoadingTv.visibility = VISIBLE
+            notificationsRv.visibility = GONE
+        }
         binding.addNotificationFab.setOnClickListener {
             val addNotifView =
                 layoutInflater.inflate(R.layout.add_notification_dialog, view as ViewGroup?, false)
@@ -91,13 +97,32 @@ class NotificationsFragment : Fragment() {
                 }
             }
         }
+        val notificationsAdapter = NotificationsAdapter(listOf())
         val notificationRecyclerView = binding.notificationsRv
         notificationRecyclerView.setHasFixedSize(true)
         notificationRecyclerView.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-        notificationRecyclerView.adapter = NotificationsAdapter(listOf())
+        notificationRecyclerView.adapter = notificationsAdapter
         viewModel.getCommunications().observe(viewLifecycleOwner) {
-            (notificationRecyclerView.adapter as NotificationsAdapter).setNotifications(it)
+            if (it.isEmpty()) {
+                binding.apply {
+                    notificationsProgressBar.visibility = GONE
+                    notificationsLoadingTv.visibility = GONE
+                    notificationsRv.visibility = GONE
+                    noItemsTvNotifications.visibility = VISIBLE
+                    noItemsTvNotifications.visibility = VISIBLE
+                }
+            } else {
+                binding.apply {
+                    notificationsProgressBar.visibility = GONE
+                    notificationsLoadingTv.visibility = GONE
+                    notificationsRv.visibility = GONE
+                    noItemsTvNotifications.visibility = GONE
+                    noItemsTvNotifications.visibility = GONE
+                    notificationsRv.visibility = VISIBLE
+                }
+                notificationsAdapter.setNotifications(it)
+            }
         }
     }
 

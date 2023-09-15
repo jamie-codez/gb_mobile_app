@@ -27,13 +27,38 @@ class TasksFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.apply {
+            tasksProgressBar.visibility = View.VISIBLE
+            tasksLoadingTv.visibility = View.VISIBLE
+            tasksRv.visibility = View.GONE
+            noItemsIvTasks.visibility = View.GONE
+            noItemsTvTasks.visibility = View.GONE
+        }
         val tasksRecyclerView = binding.tasksRv
+        val tasksAdapter = TasksAdapter(listOf())
         tasksRecyclerView.setHasFixedSize(true)
         tasksRecyclerView.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-        tasksRecyclerView.adapter = TasksAdapter(listOf())
+        tasksRecyclerView.adapter = tasksAdapter
         viewModel.getTasks().observe(viewLifecycleOwner) {
-            (tasksRecyclerView.adapter as TasksAdapter).setTasks(it)
+            if (it.isEmpty()) {
+                binding.apply {
+                    tasksProgressBar.visibility = View.GONE
+                    tasksLoadingTv.visibility = View.GONE
+                    tasksRv.visibility = View.VISIBLE
+                    noItemsIvTasks.visibility = View.GONE
+                    noItemsTvTasks.visibility = View.GONE
+                }
+            } else {
+                binding.apply {
+                    tasksProgressBar.visibility = View.GONE
+                    tasksLoadingTv.visibility = View.GONE
+                    tasksRv.visibility = View.GONE
+                    noItemsIvTasks.visibility = View.VISIBLE
+                    noItemsTvTasks.visibility = View.VISIBLE
+                }
+                tasksAdapter.setTasks(it)
+            }
         }
     }
 

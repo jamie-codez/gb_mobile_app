@@ -15,6 +15,50 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:listitem="@layout/notification_item" />
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:id="@+id/tasks_progress_bar"
+        android:visibility="gone"
+        tools:visibility="visible"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/loading"
+        android:id="@+id/tasks_loading_tv"
+        android:visibility="gone"
+        tools:visibility="visible"
+        android:textSize="20sp"
+        app:layout_constraintTop_toBottomOf="@id/tasks_progress_bar"
+        app:layout_constraintStart_toStartOf="@id/tasks_progress_bar"
+        app:layout_constraintEnd_toEndOf="@id/tasks_progress_bar"/>
+    <ImageView
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:src="@drawable/no_items"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:id="@+id/no_items_iv_tasks"
+        android:visibility="gone"
+        tools:visibility="visible"
+        android:contentDescription="@string/no_items_yet" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/no_items_yet"
+        android:id="@+id/no_items_tv_tasks"
+        android:visibility="gone"
+        tools:visibility="visible"
+        android:textSize="20sp"
+        app:layout_constraintTop_toBottomOf="@id/tasks_progress_bar"
+        app:layout_constraintStart_toStartOf="@id/tasks_progress_bar"
+        app:layout_constraintEnd_toEndOf="@id/tasks_progress_bar"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:layout_width="wrap_content"

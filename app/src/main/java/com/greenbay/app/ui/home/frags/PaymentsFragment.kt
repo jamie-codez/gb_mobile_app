@@ -34,6 +34,13 @@ class PaymentsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.apply {
+            paymentsProgressBar.visibility = View.VISIBLE
+            paymentsLoadingTv.visibility = View.VISIBLE
+            paymentsRv.visibility = View.GONE
+            noItemsIvPayments.visibility = View.GONE
+            noItemsTvPayments.visibility = View.GONE
+        }
         binding.makePaymentFab.setOnClickListener {
             val payView = layoutInflater.inflate(R.layout.pay_dialog, view as ViewGroup?, false)
             val binding = PayDialogBinding.bind(payView)
@@ -167,13 +174,33 @@ class PaymentsFragment : Fragment() {
                 alertDialog.show()
             }
         }
+        val paymentsAdapter = PaymentsAdapter(listOf())
         val paymentsRecyclerView = binding.paymentsRv
         paymentsRecyclerView.setHasFixedSize(true)
         paymentsRecyclerView.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-        paymentsRecyclerView.adapter = PaymentsAdapter(listOf())
+        paymentsRecyclerView.adapter = paymentsAdapter
         viewModel.getPayments().observe(viewLifecycleOwner) {
-            (paymentsRecyclerView.adapter as PaymentsAdapter).setPayments(it)
+            if (it.isEmpty()) {
+                binding.apply {
+                    paymentsRv.visibility = View.GONE
+                    paymentsProgressBar.visibility = View.GONE
+                    paymentsLoadingTv.visibility = View.GONE
+                    paymentsRv.visibility = View.GONE
+                    noItemsIvPayments.visibility = View.VISIBLE
+                    noItemsTvPayments.visibility = View.VISIBLE
+                }
+            } else {
+                binding.apply {
+                    paymentsProgressBar.visibility = View.GONE
+                    paymentsLoadingTv.visibility = View.GONE
+                    paymentsRv.visibility = View.GONE
+                    noItemsIvPayments.visibility = View.GONE
+                    noItemsTvPayments.visibility = View.GONE
+                    paymentsRv.visibility = View.VISIBLE
+                    paymentsAdapter.setPayments(it)
+                }
+            }
         }
     }
 

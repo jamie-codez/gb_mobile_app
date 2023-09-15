@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
+import android.security.identity.AccessControlProfileId
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
@@ -72,11 +73,11 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
         return !accessToken.isNullOrEmpty()
     }
 
-    fun getUser(): LiveData<AppUser> {
+    fun getUser(id: String): LiveData<AppUser> {
         val accessToken = prefs.getString("accessToken", "")
         if (!accessToken.isNullOrEmpty()) {
             viewModelScope.launch {
-                repository.getUser().enqueue(object : Callback<AppUserResponse> {
+                repository.getUser(id).enqueue(object : Callback<AppUserResponse> {
                     override fun onResponse(
                         call: Call<AppUserResponse>,
                         response: Response<AppUserResponse>
