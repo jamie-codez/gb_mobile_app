@@ -41,7 +41,11 @@ data class CommunicationListResponse(
 data class HouseListResponse(
     @SerializedName("status") val status: Int,
     @SerializedName("message") val message: String,
-    @SerializedName("payload") val data: List<House>
+    @SerializedName("payload") val payload: HousesResponse
+)
+
+data class HousesResponse(
+    @SerializedName("data") val data:List<House>
 )
 
 data class HouseResponse(

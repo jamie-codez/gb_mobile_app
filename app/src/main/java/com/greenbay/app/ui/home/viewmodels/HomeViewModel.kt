@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.greenbay.app.models.HouseListResponse
 import com.greenbay.app.models.HouseResponse
 import com.greenbay.app.models.ResponseModel
+import com.greenbay.app.models.STKPayload
 import com.greenbay.app.network.Repository
 import com.greenbay.app.network.RetrofitInstance
 import com.greenbay.app.ui.home.models.Communication
@@ -53,7 +54,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
     val house = MutableLiveData<House>()
 
 
-    fun getCommunications(): MutableLiveData<List<Communication>> {
+    fun getCommunicationz(): MutableLiveData<List<Communication>> {
         viewModelScope.launch {
             repository.getCommunications(accessToken, "1")
                 .enqueue(object : Callback<CommunicationListResponse> {
@@ -62,7 +63,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
                         response: Response<CommunicationListResponse>
                     ) {
                         if (response.code() == 200) {
-                            communications.value = response.body()?.data
+                            communications.value = response.body()?.payload?.data
                         } else {
                             communications.value = listOf()
                         }
@@ -77,7 +78,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
         return communications
     }
 
-    fun getCommunication(id: String): MutableLiveData<Communication> {
+    fun getCommunicationn(id: String): MutableLiveData<Communication> {
         viewModelScope.launch {
             repository.getCommunication(accessToken, id)
                 .enqueue(object : Callback<CommunicationResponse> {
@@ -150,7 +151,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
         return updateCommunication
     }
 
-    fun getTasks(): MutableLiveData<List<Task>> {
+    fun getTaskz(): MutableLiveData<List<Task>> {
         viewModelScope.launch {
             repository.getTasks(accessToken, "1").enqueue(object : Callback<TaskListResponse> {
                 override fun onResponse(
@@ -158,7 +159,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
                     response: Response<TaskListResponse>
                 ) {
                     if (response.code() == 200) {
-                        tasks.value = response.body()?.data
+                        tasks.value = response.body()?.payload?.data
                     } else {
                         tasks.value = listOf()
                     }
@@ -172,7 +173,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
         return tasks
     }
 
-    fun getTask(id: String): MutableLiveData<Task> {
+    fun getTaskk(id: String): MutableLiveData<Task> {
         viewModelScope.launch {
             repository.getTask(accessToken, id).enqueue(object : Callback<TaskResponse> {
                 override fun onResponse(
@@ -194,7 +195,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
         return task
     }
 
-    fun getPayments(): MutableLiveData<List<Payment>> {
+    fun getPaymentz(): MutableLiveData<List<Payment>> {
         viewModelScope.launch {
             repository.getPayments(accessToken, email, "1")
                 .enqueue(object : Callback<PaymentListResponse> {
@@ -203,7 +204,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
                         response: Response<PaymentListResponse>
                     ) {
                         if (response.code() == 200) {
-                            payments.value = response.body()?.data
+                            payments.value = response.body()?.payload?.data
                         } else {
                             payments.value = listOf()
                         }
@@ -217,7 +218,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
         return payments
     }
 
-    fun getPayment(id: String): MutableLiveData<Payment> {
+    fun getPaymentt(id: String): MutableLiveData<Payment> {
         viewModelScope.launch {
             repository.getPayment(accessToken, id).enqueue(object : Callback<PaymentResponse> {
                 override fun onResponse(
@@ -227,21 +228,21 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
                     if (response.code() == 200) {
                         payment.value = response.body()?.data as Payment
                     } else {
-                        payment.value = Payment("", "", "", "", "", "", 0, false)
+                        payment.value = Payment("", "", "", "", "", "",  false)
                     }
                 }
 
                 override fun onFailure(call: Call<PaymentResponse>, t: Throwable) {
-                    payment.value = Payment("", "", "", "", "", "", 0, false)
+                    payment.value = Payment("", "", "", "", "", "",  false)
                 }
             })
         }
         return payment
     }
 
-    fun getStkPush(amount: Int): MutableLiveData<ResponseModel> {
+    fun getStkPush(payload: STKPayload): MutableLiveData<ResponseModel> {
         viewModelScope.launch {
-            repository.getStkPush(accessToken, amount)
+            repository.getStkPush(accessToken, payload)
                 .enqueue(object : Callback<ResponseModel> {
                     override fun onResponse(
                         call: Call<ResponseModel>,
@@ -273,12 +274,12 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
                         if (response.code() == 200) {
                             pay.value = response.body()?.data as Payment
                         } else {
-                            pay.value = Payment("", "", "", "", "", "", 0, false)
+                            pay.value = Payment("", "", "", "", "", "",  false)
                         }
                     }
 
                     override fun onFailure(call: Call<ResponseModel>, t: Throwable) {
-                        pay.value = Payment("", "", "", "", "", "", 0, false)
+                        pay.value = Payment("", "", "", "", "", "",  false)
                     }
                 })
         }
@@ -296,19 +297,19 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
                         if (response.code() == 200) {
                             updatePayment.value = response.body()?.data as Payment
                         } else {
-                            updatePayment.value = Payment("", "", "", "", "", "", 0, false)
+                            updatePayment.value = Payment("", "", "", "", "", "",  false)
                         }
                     }
 
                     override fun onFailure(call: Call<ResponseModel>, t: Throwable) {
-                        updatePayment.value = Payment("", "", "", "", "", "", 0, false)
+                        updatePayment.value = Payment("", "", "", "", "", "",  false)
                     }
                 })
         }
         return updatePayment
     }
 
-    fun getTenant(id: String): MutableLiveData<Tenant> {
+    fun getTenantt(id: String): MutableLiveData<Tenant> {
         viewModelScope.launch {
             repository.getTenant(accessToken, id).enqueue(object : Callback<TenantResponse> {
                 override fun onResponse(
@@ -330,7 +331,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
         return tenant
     }
 
-    fun getHouse(id: String): MutableLiveData<House> {
+    fun getHousee(id: String): MutableLiveData<House> {
         viewModelScope.launch {
             repository.getHouse(accessToken, id).enqueue(object : Callback<HouseResponse> {
                 override fun onResponse(
@@ -352,7 +353,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
         return house
     }
 
-    fun getHouses(): MutableLiveData<List<House>?> {
+    fun getHousez(): MutableLiveData<List<House>?> {
         viewModelScope.launch {
             repository.getHouses(accessToken, "1").enqueue(object : Callback<HouseListResponse> {
                 override fun onResponse(
@@ -360,7 +361,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
                     response: Response<HouseListResponse>
                 ) {
                     if (response.code() == 200) {
-                        houses.value = response.body()?.data
+                        houses.value = response.body()?.payload?.data
                     } else {
                         houses.value = listOf()
                     }

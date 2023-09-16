@@ -56,7 +56,7 @@
         android:visibility="gone"
         tools:visibility="visible"
         android:textSize="20sp"
-        app:layout_constraintTop_toBottomOf="@id/houses_progress_bar"
+        app:layout_constraintTop_toBottomOf="@id/no_items_iv_houses"
         app:layout_constraintStart_toStartOf="@id/houses_progress_bar"
         app:layout_constraintEnd_toEndOf="@id/houses_progress_bar"/>
 

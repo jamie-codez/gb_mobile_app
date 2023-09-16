@@ -2,11 +2,11 @@ package com.greenbay.app.network
 
 import com.greenbay.app.models.AppUser
 import com.greenbay.app.models.AppUserResponse
-import com.greenbay.app.models.CommunicationListResponse
 import com.greenbay.app.models.HouseListResponse
 import com.greenbay.app.models.HouseResponse
 import com.greenbay.app.models.LoginModel
 import com.greenbay.app.models.ResponseModel
+import com.greenbay.app.models.STKPayload
 import com.greenbay.app.ui.home.models.Communication
 import com.greenbay.app.ui.home.models.CommunicationResponse
 import com.greenbay.app.ui.home.models.CommunicationUpdate
@@ -81,7 +81,7 @@ interface GreenBayService {
         "Accept: application/json"
     )
     fun getStkPush(
-        @Header("access-token") token: String, @Body amount: Int
+        @Header("access-token") token: String, @Body payload: STKPayload
     ): Call<ResponseModel>
 
     // Payments Endpoints

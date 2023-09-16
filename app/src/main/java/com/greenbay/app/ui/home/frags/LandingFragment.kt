@@ -40,7 +40,7 @@ class LandingFragment : Fragment() {
         housesRecyclerView.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         housesRecyclerView.adapter = houseAdapter
-        viewModel.getHouses().observe(viewLifecycleOwner) {
+        viewModel.getHousez().observe(viewLifecycleOwner) {
             if (it!!.isEmpty()) {
                 binding.apply {
                     homeHousesListRv.visibility = View.GONE
@@ -57,7 +57,7 @@ class LandingFragment : Fragment() {
                     noItemsIvHouses.visibility = View.GONE
                     noItemsTvHouses.visibility = View.GONE
                 }
-                houseAdapter.setHouses(listOf())
+                houseAdapter.setHouses(it)
             }
         }
     }

@@ -13,6 +13,7 @@ import com.greenbay.app.R
 import com.greenbay.app.databinding.CreatePaymentDialogBinding
 import com.greenbay.app.databinding.FragmentPaymentsBinding
 import com.greenbay.app.databinding.PayDialogBinding
+import com.greenbay.app.models.STKPayload
 import com.greenbay.app.ui.home.adapters.PaymentsAdapter
 import com.greenbay.app.ui.home.viewmodels.HomeViewModel
 import kotlin.math.ceil
@@ -73,7 +74,7 @@ class PaymentsFragment : Fragment() {
                     }
                     return@setOnClickListener
                 }
-                viewModel.getStkPush(ceil(amount).toInt()).observe(viewLifecycleOwner) {
+                viewModel.getStkPush(STKPayload(ceil(amount).toInt())).observe(viewLifecycleOwner) {
                     if (it.status == 200) {
                         Snackbar.make(binding.root, "Payment request sent", Snackbar.LENGTH_LONG)
                             .show()
@@ -170,7 +171,7 @@ class PaymentsFragment : Fragment() {
                     transactionCode = transactionCode,
                     amount = amount,
                     from = viewModel.email,
-                    dateCreated = System.currentTimeMillis(),
+//                    dateCreated = System.currentTimeMillis(),
                     verified = false,
                 )
                 viewModel.createPayment(payment).observe(viewLifecycleOwner) {
@@ -189,13 +190,69 @@ class PaymentsFragment : Fragment() {
                 alertDialog.show()
             }
         }
+        binding.makePaymentFab.setOnClickListener {
+            val payView = layoutInflater.inflate(R.layout.pay_dialog, view as ViewGroup?, false)
+            val binding = PayDialogBinding.bind(payView)
+            val alertDialogBuilder = AlertDialog.Builder(requireContext())
+            alertDialogBuilder.setTitle("Make Payment")
+            alertDialogBuilder.setView(binding.root)
+            binding.dialogPayBtn.setOnClickListener {
+                binding.apply {
+                    paymentsProgressBar.visibility = View.VISIBLE
+                    dialogPayBtn.isEnabled=false
+                    dialogPayBtn.text = "Processing..."
+                }
+                val amnt = binding.dialogAmountEt.text.toString()
+                if (amnt.isEmpty()) {
+                    binding.apply {
+                        dialogAmountEt.error = "Amount is required"
+                        paymentsProgressBar.visibility = View.GONE
+                        dialogPayBtn.isEnabled=true
+                        dialogPayBtn.text = "Pay"
+                    }
+                    return@setOnClickListener
+                }
+                val amount = amnt.toDouble()
+                if (amount < 1) {
+                    binding.apply {
+                        dialogAmountEt.error = "Amount must be greater than 0"
+                        paymentsProgressBar.visibility = View.GONE
+                        dialogPayBtn.isEnabled=true
+                        dialogPayBtn.text = "Pay"
+                    }
+                    return@setOnClickListener
+                }
+                viewModel.getStkPush(STKPayload(amount=ceil(amount).toInt())).observe(viewLifecycleOwner) {
+                    if (it.status == 200) {
+                        Snackbar.make(binding.root, "Payment request sent", Snackbar.LENGTH_LONG)
+                            .show()
+                        binding.apply {
+                            paymentsProgressBar.visibility = View.GONE
+                            dialogPayBtn.isEnabled=true
+                            dialogPayBtn.text = "Pay"
+                        }
+                        alertDialogBuilder.create().dismiss()
+                    } else {
+                        Snackbar.make(binding.root, "Payment request failed", Snackbar.LENGTH_LONG)
+                            .show()
+                        binding.apply {
+                            paymentsProgressBar.visibility = View.GONE
+                            dialogPayBtn.isEnabled=true
+                            dialogPayBtn.text = "Pay"
+                        }
+                    }
+                }
+            }
+            val alertDialog = alertDialogBuilder.create()
+            alertDialog.show()
+        }
         val paymentsAdapter = PaymentsAdapter(listOf())
         val paymentsRecyclerView = binding.paymentsRv
         paymentsRecyclerView.setHasFixedSize(true)
         paymentsRecyclerView.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         paymentsRecyclerView.adapter = paymentsAdapter
-        viewModel.getPayments().observe(viewLifecycleOwner) {
+        viewModel.getPaymentz().observe(viewLifecycleOwner) {
             if (it.isEmpty()) {
                 binding.apply {
                     paymentsRv.visibility = View.GONE

@@ -8,9 +8,14 @@ data class LoginModel(
 )
 
 data class ResponseModel(
-    @SerializedName("status") val status: Int,
+    @SerializedName("code") val status: Int,
     @SerializedName("message") val message: String,
     @SerializedName("payload") val data: Any?
 ){
     constructor():this(0,"",null)
 }
+
+data class STKPayload(
+    @SerializedName("amount")val amount:Int,
+    @SerializedName("phone")val phone:String?=null,
+)

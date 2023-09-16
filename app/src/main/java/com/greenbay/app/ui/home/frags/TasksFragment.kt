@@ -40,7 +40,7 @@ class TasksFragment : Fragment() {
         tasksRecyclerView.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         tasksRecyclerView.adapter = tasksAdapter
-        viewModel.getTasks().observe(viewLifecycleOwner) {
+        viewModel.getTaskz().observe(viewLifecycleOwner) {
             if (it.isEmpty()) {
                 binding.apply {
                     tasksProgressBar.visibility = View.GONE

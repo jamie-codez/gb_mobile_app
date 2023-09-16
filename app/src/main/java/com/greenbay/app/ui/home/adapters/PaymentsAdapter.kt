@@ -53,11 +53,11 @@ class PaymentsAdapter(private var payments: List<Payment>) :
             binding.paymentTitleTv.text = payment.title
             binding.paymentAmountTv.text = payment.amount.toString()
             binding.paymentDescriptionTv.text = payment.description
-            binding.paymentTimeTv.text =
-                SimpleDateFormat(
-                    "dd/MM/yyyy HH:mm:ss",
-                    Locale.getDefault()
-                ).format(payment.dateCreated)
+//            binding.paymentTimeTv.text =
+//                SimpleDateFormat(
+//                    "dd/MM/yyyy HH:mm:ss",
+//                    Locale.getDefault()
+//                ).format(payment.dateCreated)
             if (payment.verified == true) {
                 binding.paymentDot.setBackgroundColor(binding.root.context.getColor(com.greenbay.app.R.color.green))
             } else {

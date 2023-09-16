@@ -2,6 +2,7 @@ package com.greenbay.app.network
 
 import com.greenbay.app.models.AppUser
 import com.greenbay.app.models.LoginModel
+import com.greenbay.app.models.STKPayload
 import com.greenbay.app.ui.home.models.Communication
 import com.greenbay.app.ui.home.models.CommunicationUpdate
 import com.greenbay.app.ui.home.models.Payment
@@ -19,7 +20,7 @@ class Repository(private val apiService: GreenBayService) {
     fun getTasks(token: String, page: String) =
         apiService.getTasks(token, page.toInt())
 
-    fun getStkPush(token: String, amount: Int) = apiService.getStkPush(token, amount)
+    fun getStkPush(token: String, payload:STKPayload) = apiService.getStkPush(token, payload)
     fun getPayments(token: String, email: String, page: String) =
         apiService.getPayments(token, email, page.toInt())
 

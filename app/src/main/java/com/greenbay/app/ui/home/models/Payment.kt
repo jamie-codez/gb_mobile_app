@@ -3,7 +3,7 @@ package com.greenbay.app.ui.home.models
 import com.google.gson.annotations.SerializedName
 
 sealed class ApiResponse<out T>(
-    @SerializedName("status") val status: Int,
+    @SerializedName("code") val status: Int,
     @SerializedName("message") val message: String,
     @SerializedName("data") val data: T?,
 ) {
@@ -19,20 +19,24 @@ data class Payment(
     @SerializedName("transactionCode") val transactionCode: String?,
     @SerializedName("amount") val amount: String?,
     @SerializedName("from") val from: String?,
-    @SerializedName("dateCreated") val dateCreated: Long?,
+//    @SerializedName("dateCreated") val dateCreated: Long?,
     @SerializedName("verified") val verified: Boolean?,
 )
 
 data class PaymentResponse(
-    @SerializedName("status") val status: Int,
+    @SerializedName("code") val status: Int,
     @SerializedName("message") val message: String,
     @SerializedName("payload") val data: Payment
 )
 
 data class PaymentListResponse(
-    @SerializedName("status") val status: Int,
+    @SerializedName("code") val status: Int,
     @SerializedName("message") val message: String,
-    @SerializedName("payload") val data: List<Payment>
+    @SerializedName("payload") val payload: PayResponse
+)
+
+data class PayResponse(
+    @SerializedName("data") val data:List<Payment>
 )
 
 data class PaymentUpdate(
@@ -57,15 +61,19 @@ data class CommunicationUpdate(
 )
 
 data class CommunicationResponse(
-    @SerializedName("status") val status: Int,
+    @SerializedName("code") val status: Int,
     @SerializedName("message") val message: String,
     @SerializedName("payload") val data: Communication
 )
 
 data class CommunicationListResponse(
-    @SerializedName("status") val status: Int,
+    @SerializedName("code") val status: Int,
     @SerializedName("message") val message: String,
-    @SerializedName("payload") val data: List<Communication>
+    @SerializedName("payload") val payload: CommListResponse
+)
+
+data class CommListResponse(
+    @SerializedName("data")val data: List<Communication>
 )
 
 data class Task(
@@ -79,15 +87,18 @@ data class Task(
 )
 
 data class TaskResponse(
-    @SerializedName("status") val status: Int,
+    @SerializedName("code") val status: Int,
     @SerializedName("message") val message: String,
     @SerializedName("payload") val data: Task
 )
 
 data class TaskListResponse(
-    @SerializedName("status") val status: Int,
+    @SerializedName("code") val status: Int,
     @SerializedName("message") val message: String,
-    @SerializedName("payload") val data: List<Task>
+    @SerializedName("payload") val payload: TaskList
+)
+data class TaskList(
+    @SerializedName("data") val data: List<Task>
 )
 
 
@@ -105,13 +116,13 @@ data class Tenant(
 
 
 data class TenantResponse(
-    @SerializedName("status") val status: Int,
+    @SerializedName("code") val status: Int,
     @SerializedName("message") val message: String,
     @SerializedName("payload") val data: Tenant
 )
 
 data class TenantListResponse(
-    @SerializedName("status") val status: Int,
+    @SerializedName("code") val status: Int,
     @SerializedName("message") val message: String,
     @SerializedName("payload") val data: List<Tenant>
 )

@@ -103,7 +103,7 @@ class NotificationsFragment : Fragment() {
         notificationRecyclerView.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         notificationRecyclerView.adapter = notificationsAdapter
-        viewModel.getCommunications().observe(viewLifecycleOwner) {
+        viewModel.getCommunicationz().observe(viewLifecycleOwner) {
             if (it.isEmpty()) {
                 binding.apply {
                     notificationsProgressBar.visibility = GONE
