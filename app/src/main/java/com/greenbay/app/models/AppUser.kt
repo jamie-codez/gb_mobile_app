@@ -19,6 +19,10 @@ data class AppUser(
 data class AppUserResponse(
     @SerializedName("status") val status: Int,
     @SerializedName("message") val message: String,
-    @SerializedName("payload") val data: AppUser
+    @SerializedName("payload") val payload: AppUserPayload
+)
+
+data class AppUserPayload(
+    @SerializedName("data")val data:List<AppUser>
 )
 

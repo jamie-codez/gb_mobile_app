@@ -38,7 +38,7 @@ class LandingFragment : Fragment() {
         val houseAdapter = HouseAdapter(listOf())
         housesRecyclerView.setHasFixedSize(true)
         housesRecyclerView.layoutManager =
-            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         housesRecyclerView.adapter = houseAdapter
         viewModel.getHousez().observe(viewLifecycleOwner) {
             if (it!!.isEmpty()) {

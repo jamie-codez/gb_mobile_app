@@ -56,7 +56,7 @@
         android:visibility="gone"
         tools:visibility="visible"
         android:textSize="20sp"
-        app:layout_constraintTop_toBottomOf="@id/tasks_progress_bar"
+        app:layout_constraintTop_toBottomOf="@id/no_items_iv_tasks"
         app:layout_constraintStart_toStartOf="@id/tasks_progress_bar"
         app:layout_constraintEnd_toEndOf="@id/tasks_progress_bar"/>
 
@@ -64,6 +64,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
+        android:id="@+id/add_task_fab"
         android:contentDescription="@string/fab"
         android:elevation="20dp"
         android:src="@drawable/add"

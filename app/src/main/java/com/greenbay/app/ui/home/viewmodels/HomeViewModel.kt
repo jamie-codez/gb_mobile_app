@@ -11,10 +11,14 @@ import com.greenbay.app.models.ResponseModel
 import com.greenbay.app.models.STKPayload
 import com.greenbay.app.network.Repository
 import com.greenbay.app.network.RetrofitInstance
+import com.greenbay.app.ui.home.models.ClientTask
+import com.greenbay.app.ui.home.models.ClientTaskResponse
+import com.greenbay.app.ui.home.models.ClientTaskzResponse
 import com.greenbay.app.ui.home.models.Communication
 import com.greenbay.app.ui.home.models.CommunicationListResponse
 import com.greenbay.app.ui.home.models.CommunicationResponse
 import com.greenbay.app.ui.home.models.CommunicationUpdate
+import com.greenbay.app.ui.home.models.Data
 import com.greenbay.app.ui.home.models.House
 import com.greenbay.app.ui.home.models.Payment
 import com.greenbay.app.ui.home.models.PaymentListResponse
@@ -42,8 +46,8 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
     val communication = MutableLiveData<Communication>()
     val comm = MutableLiveData<Communication>()
     val updateCommunication = MutableLiveData<Communication>()
-    val tasks = MutableLiveData<List<Task>>()
-    val task = MutableLiveData<Task>()
+    val tasks = MutableLiveData<List<Data>>()
+    val task = MutableLiveData<ClientTask>()
     val payments = MutableLiveData<List<Payment>>()
     val payment = MutableLiveData<Payment>()
     val stkResponse = MutableLiveData<ResponseModel>()
@@ -151,12 +155,12 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
         return updateCommunication
     }
 
-    fun getTaskz(): MutableLiveData<List<Task>> {
+    fun getTaskz(): MutableLiveData<List<Data>> {
         viewModelScope.launch {
-            repository.getTasks(accessToken, "1").enqueue(object : Callback<TaskListResponse> {
+            repository.getTasks(accessToken, "1").enqueue(object : Callback<ClientTaskzResponse> {
                 override fun onResponse(
-                    call: Call<TaskListResponse>,
-                    response: Response<TaskListResponse>
+                    call: Call<ClientTaskzResponse>,
+                    response: Response<ClientTaskzResponse>
                 ) {
                     if (response.code() == 200) {
                         tasks.value = response.body()?.payload?.data
@@ -165,7 +169,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
                     }
                 }
 
-                override fun onFailure(call: Call<TaskListResponse>, t: Throwable) {
+                override fun onFailure(call: Call<ClientTaskzResponse>, t: Throwable) {
                     tasks.value = listOf()
                 }
             })
@@ -173,7 +177,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
         return tasks
     }
 
-    fun getTaskk(id: String): MutableLiveData<Task> {
+    fun getTaskk(id: String): MutableLiveData<ClientTask> {
         viewModelScope.launch {
             repository.getTask(accessToken, id).enqueue(object : Callback<TaskResponse> {
                 override fun onResponse(
@@ -181,14 +185,14 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
                     response: Response<TaskResponse>
                 ) {
                     if (response.code() == 200) {
-                        task.value = response.body()?.data as Task
+                        task.value = response.body()?.data as ClientTask
                     } else {
-                        task.value = Task("", "", "", 0, 0, "", false)
+                        task.value = ClientTask("", "", "", "", "", "", "",0,"","","","")
                     }
                 }
 
                 override fun onFailure(call: Call<TaskResponse>, t: Throwable) {
-                    task.value = Task("", "", "", 0, 0, "", false)
+                    task.value = ClientTask("", "", "", "", "", "", "",0,"","","","")
                 }
             })
         }

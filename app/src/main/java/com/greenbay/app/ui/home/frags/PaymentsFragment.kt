@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
-import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
@@ -15,6 +14,7 @@ import com.greenbay.app.databinding.FragmentPaymentsBinding
 import com.greenbay.app.databinding.PayDialogBinding
 import com.greenbay.app.models.STKPayload
 import com.greenbay.app.ui.home.adapters.PaymentsAdapter
+import com.greenbay.app.ui.home.models.Payment
 import com.greenbay.app.ui.home.viewmodels.HomeViewModel
 import kotlin.math.ceil
 
@@ -99,96 +99,63 @@ class PaymentsFragment : Fragment() {
             alertDialog.show()
         }
         binding.addPaymentFab.setOnClickListener {
-            val payView =
+            Snackbar.make(binding.root, "Add payment clicked", Snackbar.LENGTH_LONG).show()
+            val createPaymentView =
                 layoutInflater.inflate(R.layout.create_payment_dialog, view as ViewGroup?, false)
-            val binding = CreatePaymentDialogBinding.bind(payView)
+            val binding = CreatePaymentDialogBinding.bind(createPaymentView)
             val alertDialogBuilder = AlertDialog.Builder(requireContext())
             alertDialogBuilder.setTitle("Add Payment")
             alertDialogBuilder.setView(binding.root)
-            binding.paymentDialogTitleEt.doOnTextChanged { text, start, before, count ->
-                if (text.toString().trim().isNotEmpty()) {
-                    binding.paymentDialogTitleEtl.error = null
-                } else {
-                    binding.paymentDialogTitleEtl.error = "Title is required"
-                }
-            }
-            binding.communicationDialogDescriptionEt.doOnTextChanged { text, start, before, count ->
-                if (text.toString().trim().isNotEmpty()) {
-                    binding.communicationDialogDescriptionEtl.error = null
-                } else {
-                    binding.communicationDialogDescriptionEtl.error = "Description is required"
-                }
-            }
-            binding.paymentDialogReferenceEt.doOnTextChanged { text, start, before, count ->
-                if (text.toString().trim().isNotEmpty()) {
-                    binding.paymentDialogReferenceEtl.error = null
-                } else {
-                    binding.paymentDialogReferenceEtl.error = "Transaction code is required"
-                }
-            }
-            binding.paymentDialogAmountEt.doOnTextChanged { text, start, before, count ->
-                if (text.toString().trim().isNotEmpty()) {
-                    binding.paymentDialogAmountEtl.error = null
-                } else {
-                    binding.paymentDialogAmountEtl.error = "Amount is required"
-                }
-            }
-
-            binding.dialogAddPaymentBtn.setOnClickListener {
-                binding.dialogAddPaymentBtn.isEnabled = false
-                binding.dialogAddPaymentBtn.text = "Processing..."
-                val title = binding.paymentDialogTitleEt.text.toString().trim()
-                val description = binding.communicationDialogDescriptionEt.text.toString().trim()
-                val transactionCode = binding.paymentDialogReferenceEt.text.toString().trim()
-                val amount = binding.paymentDialogAmountEt.text.toString().trim()
-                if (title.isEmpty()) {
-                    binding.paymentDialogTitleEtl.error = "Title is required"
-                    binding.dialogAddPaymentBtn.isEnabled = true
-                    binding.dialogAddPaymentBtn.text = "Add"
-                    return@setOnClickListener
-                }
-                if (description.isEmpty()) {
-                    binding.communicationDialogDescriptionEtl.error = "Description is required"
-                    binding.dialogAddPaymentBtn.isEnabled = true
-                    binding.dialogAddPaymentBtn.text = "Add"
-                    return@setOnClickListener
-                }
-                if (transactionCode.isEmpty()) {
-                    binding.paymentDialogReferenceEtl.error = "Transaction code is required"
-                    binding.dialogAddPaymentBtn.isEnabled = true
-                    binding.dialogAddPaymentBtn.text = "Add"
-                    return@setOnClickListener
-                }
-                if (amount.isEmpty()) {
-                    binding.paymentDialogAmountEtl.error = "Amount is required"
-                    binding.dialogAddPaymentBtn.isEnabled = true
-                    binding.dialogAddPaymentBtn.text = "Add"
-                    return@setOnClickListener
-                }
-                val payment = com.greenbay.app.ui.home.models.Payment(
-                    title = title,
-                    description = description,
-                    transactionCode = transactionCode,
-                    amount = amount,
-                    from = viewModel.email,
-//                    dateCreated = System.currentTimeMillis(),
-                    verified = false,
-                )
-                viewModel.createPayment(payment).observe(viewLifecycleOwner) {
-                    if (it.id != null) {
-                        Snackbar.make(binding.root, "Payment added", Snackbar.LENGTH_LONG).show()
-                        binding.dialogAddPaymentBtn.isEnabled = true
-                        binding.dialogAddPaymentBtn.text = "Add"
-                        alertDialogBuilder.create().dismiss()
-                    } else {
-                        Snackbar.make(binding.root, "Payment failed", Snackbar.LENGTH_LONG).show()
-                        binding.dialogAddPaymentBtn.isEnabled = true
-                        binding.dialogAddPaymentBtn.text = "Add"
+            binding.apply {
+                dialogAddPaymentBtn.setOnClickListener {
+                    val title = paymentDialogTitleEt.text.toString().trim()
+                    val reference = paymentDialogReferenceEt.text.toString().trim()
+                    val amount = paymentDialogAmountEt.text.toString().trim()
+                    val description = descriptionDialogDescriptionEt.text.toString().trim()
+                    if (title.isEmpty()) {
+                        paymentDialogTitleEtl.error = "Title is required"
+                        return@setOnClickListener
+                    }
+                    if (reference.isEmpty()) {
+                        paymentDialogReferenceEtl.error = "Reference is required"
+                        return@setOnClickListener
+                    }
+                    if (amount.isEmpty()) {
+                        paymentDialogAmountEtl.error = "Amount is required"
+                        return@setOnClickListener
+                    }
+                    if (description.isEmpty()) {
+                        descriptionDialogDescriptionEtl.error = "Description is required"
+                        return@setOnClickListener
+                    }
+                    val payment = Payment(
+                        from = "admin",
+                        title = title,
+                        transactionCode = reference,
+                        amount = amount,
+                        description = description,
+                        verified = false
+                    )
+                    viewModel.createPayment(payment).observe(viewLifecycleOwner) {
+                        if (it.id != null) {
+                            Snackbar.make(
+                                binding.root,
+                                "Payment added successfully",
+                                Snackbar.LENGTH_LONG
+                            ).show()
+                            alertDialogBuilder.create().dismiss()
+                        } else {
+                            Snackbar.make(
+                                binding.root,
+                                "Failed to add payment,try again",
+                                Snackbar.LENGTH_LONG
+                            ).show()
+                        }
                     }
                 }
-                val alertDialog = alertDialogBuilder.create()
-                alertDialog.show()
             }
+            val alertDialog = alertDialogBuilder.create()
+            alertDialog.show()
         }
         binding.makePaymentFab.setOnClickListener {
             val payView = layoutInflater.inflate(R.layout.pay_dialog, view as ViewGroup?, false)

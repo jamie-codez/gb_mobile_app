@@ -7,6 +7,8 @@ import com.greenbay.app.models.HouseResponse
 import com.greenbay.app.models.LoginModel
 import com.greenbay.app.models.ResponseModel
 import com.greenbay.app.models.STKPayload
+import com.greenbay.app.ui.home.models.ClientTaskResponse
+import com.greenbay.app.ui.home.models.ClientTaskzResponse
 import com.greenbay.app.ui.home.models.Communication
 import com.greenbay.app.ui.home.models.CommunicationResponse
 import com.greenbay.app.ui.home.models.CommunicationUpdate
@@ -72,7 +74,7 @@ interface GreenBayService {
     fun getTasks(
         @Header("access-token") token: String,
         @Path("page") page: Int
-    ): Call<TaskListResponse>
+    ): Call<ClientTaskzResponse>
 
     //STK Push Endpoints
     @POST("/stk-push/")

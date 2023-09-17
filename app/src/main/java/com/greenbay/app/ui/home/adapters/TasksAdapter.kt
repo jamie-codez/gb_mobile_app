@@ -8,11 +8,13 @@ import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.greenbay.app.R
 import com.greenbay.app.databinding.TaskItemBinding
+import com.greenbay.app.ui.home.models.ClientTask
+import com.greenbay.app.ui.home.models.Data
 import com.greenbay.app.ui.home.models.Task
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class TasksAdapter(private var tasks: List<Task>) :
+class TasksAdapter(private var tasks: List<Data>) :
     RecyclerView.Adapter<TasksAdapter.TasksViewHolder>() {
     private lateinit var onTaskClickListener: OnTaskClickListener
 
@@ -20,7 +22,7 @@ class TasksAdapter(private var tasks: List<Task>) :
         fun onTaskClick(position: Int)
     }
 
-    fun setTasks(tasks: List<Task>) {
+    fun setTasks(tasks: List<Data>) {
         this.tasks = tasks
         notifyDataSetChanged()
     }
@@ -50,17 +52,15 @@ class TasksAdapter(private var tasks: List<Task>) :
         val binding = TaskItemBinding.bind(view)
 
         @RequiresApi(Build.VERSION_CODES.N)
-        fun bind(task: Task) {
+        fun bind(task: Data) {
             binding.taskTitleTv.text = task.title
             binding.taskDescriptionTv.text = task.description
-            binding.taskDescriptionTv.text = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-                .format(task.scheduledDate)
             binding.taskTimeTv.text =
                 SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault()).format(task.createdOn)
             binding.paymentAmountTv.visibility = View.GONE
             binding.taskTimeTv.text =
                 SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(task.createdOn)
-            if (task.status == true) {
+            if (task.status == "COMPLETED") {
                 binding.taskDot.setBackgroundColor(binding.root.context.getColor(R.color.green))
             } else {
                 binding.taskDot.setBackgroundColor(binding.root.context.getColor(R.color.red))

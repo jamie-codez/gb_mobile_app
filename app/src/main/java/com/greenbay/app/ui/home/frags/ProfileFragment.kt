@@ -3,6 +3,7 @@ package com.greenbay.app.ui.home.frags
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -45,6 +46,7 @@ class ProfileFragment : Fragment() {
                 Snackbar.make(binding.root, "Error getting user", Snackbar.LENGTH_LONG).show()
                 return@observe
             }
+            Log.i("ProfileFragment", "onViewCreated: $userId")
             binding.profileNameTv.text = it.username
             binding.profileFirstNameTv.text = it.firstName
             binding.profileLastNameTv.text = it.lastName

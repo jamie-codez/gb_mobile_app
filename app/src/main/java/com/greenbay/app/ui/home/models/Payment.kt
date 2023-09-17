@@ -80,9 +80,9 @@ data class Task(
     @SerializedName("_id") val id: String?,
     @SerializedName("title") val title: String?,
     @SerializedName("description") val description: String?,
-    @SerializedName("scheduledDate") val scheduledDate: Long?,
+    @SerializedName("scheduledDate") val scheduledDate: String?,
     @SerializedName("createdBy") val createdBy: Int,
-    @SerializedName("createdOn") val createdOn: String,
+    @SerializedName("createdOn") val createdOn: Long,
     @SerializedName("status") val status: Boolean
 )
 
@@ -90,6 +90,16 @@ data class TaskResponse(
     @SerializedName("code") val status: Int,
     @SerializedName("message") val message: String,
     @SerializedName("payload") val data: Task
+)
+
+data class ClientTaskResponse(
+    @SerializedName("code") val status: Int,
+    @SerializedName("message") val message: String,
+    @SerializedName("payload") val payload: TaskData
+)
+
+data class TaskData(
+    @SerializedName("data") val data: List<ClientTask>
 )
 
 data class TaskListResponse(

@@ -4,8 +4,6 @@ import android.app.Activity
 import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
-import android.security.identity.AccessControlProfileId
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -83,7 +81,7 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
                         response: Response<AppUserResponse>
                     ) {
                         if (response.code() == 200) {
-                            val user = response.body()?.data as AppUser
+                            val user = response.body()?.payload?.data?.get(0) as AppUser
                             appUser = MutableLiveData(user)
                             with(prefs.edit()) {
                                 putString("userId", user.id)
@@ -98,6 +96,7 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
                                 putString("password", user.password)
                                 putBoolean("verified", user.verified)
                                 apply()
+                                commit()
                             }
                         } else {
                             appUser = MutableLiveData()
