@@ -87,14 +87,14 @@ interface GreenBayService {
     ): Call<ResponseModel>
 
     // Payments Endpoints
-    @GET("/payments/{email}/{page}")
+    @GET("/payments/mine/{page}")
     @Headers(
         "Content-Type: application/json",
         "Accept: application/json"
     )
     fun getPayments(
         @Header("access-token") token: String,
-        @Path("email") email: String,
+//        @Path("email") email: String,
         @Path("page") page: Int
     ): Call<PaymentListResponse>
 

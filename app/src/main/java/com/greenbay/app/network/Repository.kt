@@ -22,7 +22,7 @@ class Repository(private val apiService: GreenBayService) {
 
     fun getStkPush(token: String, payload:STKPayload) = apiService.getStkPush(token, payload)
     fun getPayments(token: String, email: String, page: String) =
-        apiService.getPayments(token, email, page.toInt())
+        apiService.getPayments(token/**, email,**/, page.toInt())
 
     fun getPayment(token: String, id: String) = apiService.getPayment(token, id)
     fun createPayment(token: String, payment: Payment) =
