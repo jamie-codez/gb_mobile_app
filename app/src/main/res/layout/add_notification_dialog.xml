@@ -28,7 +28,7 @@
                 android:id="@+id/communication_dialog_title_et"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="numberDecimal" />
+                android:inputType="textAutoComplete" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -50,7 +50,7 @@
                 android:layout_height="100dp"
                 android:layout_gravity="top"
                 android:gravity="top"
-                android:inputType="numberDecimal" />
+                android:inputType="textAutoComplete" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button

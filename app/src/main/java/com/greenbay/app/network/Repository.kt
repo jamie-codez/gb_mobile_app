@@ -2,6 +2,7 @@ package com.greenbay.app.network
 
 import com.greenbay.app.models.AppUser
 import com.greenbay.app.models.LoginModel
+import com.greenbay.app.models.ResetBody
 import com.greenbay.app.models.STKPayload
 import com.greenbay.app.ui.home.models.Communication
 import com.greenbay.app.ui.home.models.CommunicationUpdate
@@ -13,6 +14,8 @@ class Repository(private val apiService: GreenBayService) {
     fun getUser(accessToken:String,email: String) = apiService.getUser(accessToken,email)
     fun updateUser(token: String, id: String, appUser: AppUser) =
         apiService.updateUser(token, id, appUser)
+
+    fun resetPassword(email: String) = apiService.resetPassword(ResetBody(email))
 
     fun getHouse(token: String, id: String) = apiService.getHouse(token, id)
     fun getTenant(token: String, id: String) = apiService.getTenant(token, id)

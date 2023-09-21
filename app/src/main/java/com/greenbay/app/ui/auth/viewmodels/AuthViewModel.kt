@@ -25,7 +25,6 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
     private val repository = Repository(RetrofitInstance.getApiService())
 
     //    private var loginResult: MutableLiveData<LoginResult> = MutableLiveData()
-    private var appUser: MutableLiveData<AppUser> = MutableLiveData()
     private var prefs: SharedPreferences = application.getSharedPreferences(
         application.getString(R.string.app_name),
         Context.MODE_PRIVATE
@@ -75,6 +74,7 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun getUser(accessToken: String?, email: String): LiveData<AppUser> {
+        var appUser: MutableLiveData<AppUser> = MutableLiveData()
         if (!accessToken.isNullOrEmpty()) {
             viewModelScope.launch {
                 repository.getUser(accessToken, email).enqueue(object : Callback<AppUserResponse> {
@@ -144,6 +144,28 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
             }
         }
         return updateUser
+    }
+
+    fun resetPassword(email: String): LiveData<ResponseModel> {
+        val responseModel: MutableLiveData<ResponseModel> = MutableLiveData()
+        viewModelScope.launch {
+            repository.resetPassword(email).enqueue(object : Callback<ResponseModel>{
+                override fun onResponse(
+                    call: Call<ResponseModel>,
+                    response: Response<ResponseModel>
+                ) {
+                    if (response.code() == 200){
+                        val result = response.body()
+                        responseModel.value = result
+                    }
+                }
+
+                override fun onFailure(call: Call<ResponseModel>, t: Throwable) {
+                    responseModel.value = ResponseModel(0,"",null)
+                }
+            })
+        }
+        return responseModel
     }
 }
 

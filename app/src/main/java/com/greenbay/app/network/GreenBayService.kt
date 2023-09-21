@@ -6,6 +6,7 @@ import com.greenbay.app.models.HouseListResponse
 import com.greenbay.app.models.HouseResponse
 import com.greenbay.app.models.LoginModel
 import com.greenbay.app.models.LoginResponse
+import com.greenbay.app.models.ResetBody
 import com.greenbay.app.models.ResponseModel
 import com.greenbay.app.models.STKPayload
 import com.greenbay.app.ui.home.models.ClientTaskResponse
@@ -39,6 +40,9 @@ interface GreenBayService {
         @Header("access-token") token: String,
         @Path("email") email: String
     ): Call<AppUserResponse>
+
+    @POST("/sendPasswordResetEmail")
+    fun resetPassword(@Body resetBody: ResetBody): Call<ResponseModel>
 
     @PUT("/user/{id}")
     fun updateUser(

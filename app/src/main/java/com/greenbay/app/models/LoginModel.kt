@@ -7,6 +7,10 @@ data class LoginModel(
     @SerializedName("password") val password: String
 )
 
+data class ResetBody(
+    @SerializedName("email") val email: String
+)
+
 data class ResponseModel(
     @SerializedName("code") val status: Int,
     @SerializedName("message") val message: String,

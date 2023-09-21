@@ -10,10 +10,13 @@ import android.view.View.GONE
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
+import android.widget.EditText
+import androidx.appcompat.app.AlertDialog
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
+import com.google.android.material.snackbar.Snackbar
 import com.greenbay.app.R
 import com.greenbay.app.databinding.FragmentLoginBinding
 import com.greenbay.app.models.LoginModel
@@ -62,6 +65,44 @@ class LoginFragment : Fragment() {
             } else {
                 binding.loginPasswordEtl.error = "Password is required"
             }
+        }
+        binding.forgotPasswordTv.setOnClickListener {
+            val emailEditText = EditText(requireContext()).apply {
+                hint= "Email Address"
+            }
+            AlertDialog.Builder(requireContext()).apply {
+                setTitle("Password Reset")
+                setMessage("Enter your email address to reset your password")
+                setView(emailEditText)
+                setPositiveButton("SUBMIT"){ dialog,which->
+                    val progressDialog = AlertDialog.Builder(requireContext()).apply {
+                        setTitle("Please wait")
+                        setMessage("Sending password reset link")
+                        setCancelable(false)
+                    }.create()
+                    progressDialog.show()
+                    val email = emailEditText.text.toString().trim()
+                    if (email.isEmpty()) {
+                        progressDialog.dismiss()
+                        emailEditText.error = "Email is required"
+                        return@setPositiveButton
+                    }
+                    if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                        progressDialog.dismiss()
+                        emailEditText.error = "Invalid email address"
+                        return@setPositiveButton
+                    }
+                    viewModel.resetPassword(email).observe(viewLifecycleOwner){
+                        if (it.status== 200){
+                            progressDialog.dismiss()
+                            Snackbar.make(binding.root,"Password reset link sent to $email",Snackbar.LENGTH_LONG).show()
+                        }else{
+                            progressDialog.dismiss()
+                            Snackbar.make(binding.root,"Error resetting password",Snackbar.LENGTH_LONG).show()
+                        }
+                    }
+                }
+            }.create().show()
         }
         binding.loginBtn.setOnClickListener {
             it.isEnabled = false
