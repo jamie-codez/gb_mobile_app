@@ -51,7 +51,7 @@ class PaymentsAdapter(private var payments: List<Payment>) :
         @RequiresApi(Build.VERSION_CODES.N)
         fun bind(payment: Payment) {
             binding.paymentTitleTv.text = payment.title
-            binding.paymentAmountTv.text = payment.amount.toString()
+            binding.paymentAmountTv.text = "Amount: KES. ${payment.amount.toString()}"
             binding.paymentDescriptionTv.text = payment.description
 //            binding.paymentTimeTv.text =
 //                SimpleDateFormat(

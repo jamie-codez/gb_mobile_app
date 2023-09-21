@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/landingFragment"
         android:name="com.greenbay.app.ui.home.frags.LandingFragment"
-        android:label="Landing"
+        android:label="Home"
         tools:layout="@layout/fragment_landing" />
     <fragment
         android:id="@+id/notificationsFragment"

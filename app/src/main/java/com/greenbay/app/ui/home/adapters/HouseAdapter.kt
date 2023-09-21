@@ -1,5 +1,6 @@
 package com.greenbay.app.ui.home.adapters
 
+import android.annotation.SuppressLint
 import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
@@ -49,12 +50,13 @@ class HouseAdapter(private var houses: List<House>) :
     class HouseViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val binding = HouseItemBinding.bind(view)
 
+        @SuppressLint("SetTextI18n")
         @RequiresApi(Build.VERSION_CODES.N)
         fun bind(house: House) {
             binding.houseNumberTv.text = house.houseNumber
             binding.houseItemRentTv.text = house.rent
             binding.houseItemDepositTv.text = house.deposit
-            binding.houseItemFloorTv.text = house.floorNumber
+            binding.houseItemFloorTv.text = "Floor: ${house.floorNumber}"
             if (house.occupied == true) {
                 binding.houseTimeTv.text = "Occupied"
                 binding.houseDot.setBackgroundColor(binding.root.context.getColor(R.color.red))
