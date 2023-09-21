@@ -96,6 +96,7 @@ class NotificationsFragment : Fragment() {
                     }
                 }
             }
+            alertDialogBuilder.create().show()
         }
         val notificationsAdapter = NotificationsAdapter(listOf())
         val notificationRecyclerView = binding.notificationsRv
