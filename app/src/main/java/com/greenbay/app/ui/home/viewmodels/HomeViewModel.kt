@@ -44,7 +44,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
     val email = pref.getString("email", "")!!
     val communications = MutableLiveData<List<Communication>>()
     val communication = MutableLiveData<Communication>()
-    val comm = MutableLiveData<Communication>()
+    val comm = MutableLiveData<ResponseModel>()
     val updateCommunication = MutableLiveData<Communication>()
     val tasks = MutableLiveData<List<Data>>()
     val task = MutableLiveData<ClientTask>()
@@ -106,7 +106,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
         return communication
     }
 
-    fun createCommunication(communication: Communication): MutableLiveData<Communication> {
+    fun createCommunication(communication: Communication): MutableLiveData<ResponseModel> {
         viewModelScope.launch {
             repository.createCommunication(accessToken, communication)
                 .enqueue(object : Callback<ResponseModel> {
@@ -115,14 +115,14 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
                         response: Response<ResponseModel>
                     ) {
                         if (response.code() == 200) {
-                            comm.value = response.body()?.data as Communication
+                            comm.value = response.body() as ResponseModel
                         } else {
-                            comm.value = Communication("", "", "", "", "", "", 0)
+                            comm.value = ResponseModel(0, "", "")
                         }
                     }
 
                     override fun onFailure(call: Call<ResponseModel>, t: Throwable) {
-                        comm.value = Communication("", "", "", "", "", "", 0)
+                        comm.value = ResponseModel(0, "", "")
                     }
                 })
         }
