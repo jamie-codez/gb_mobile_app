@@ -82,7 +82,7 @@ class NotificationsFragment : Fragment() {
                         createdBy = email
                     )
                 viewModel.createCommunication(communication).observe(viewLifecycleOwner) {
-                    if (it.status == 200) {
+                    if (it.status == 201 || it.status == 200) {
                         Snackbar.make(
                             binding.root,
                             "Notification added successfully",
