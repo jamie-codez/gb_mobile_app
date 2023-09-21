@@ -12,6 +12,7 @@ import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
+import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.greenbay.app.R
 import com.greenbay.app.databinding.FragmentLoginBinding
@@ -28,6 +29,7 @@ import kotlinx.coroutines.launch
 
 class LoginFragment : Fragment() {
     private lateinit var binding: FragmentLoginBinding
+    private lateinit var navController: NavController
     private val viewModel by lazy {
         AuthViewModel(requireActivity().application)
     }
@@ -44,7 +46,7 @@ class LoginFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val navHostFragment =
             requireActivity().supportFragmentManager.findFragmentById(R.id.splash_host_fragment) as NavHostFragment
-        val navController = navHostFragment.navController
+        navController = navHostFragment.navController
         binding.loginEmailEt.doOnTextChanged { text, start, before, count ->
             if (text.toString().trim().isNotEmpty()) {
                 binding.loginEmailEtl.error = null
@@ -88,22 +90,11 @@ class LoginFragment : Fragment() {
                 binding.progressBar.visibility = INVISIBLE
                 return@setOnClickListener
             }
-            val results = login(email, password)
-            if (results.success) {
-                binding.loginBtn.isEnabled = true
-                viewModel.email = email
-                binding.loginBtn.text = getString(R.string.login)
-                binding.progressBar.visibility = INVISIBLE
-                navController.navigate(R.id.action_loginFragment_to_homeActivity)
-            } else {
-                it.isEnabled = true
-                binding.loginBtn.text = getString(R.string.login)
-                binding.progressBar.visibility = INVISIBLE
-            }
+            login(email, password)
         }
     }
 
-    private fun login(email: String, password: String): LoginResult {
+    private fun login(email: String, password: String) {
         val retrofitInstance = RetrofitInstance.getRetrofitInstance()
         val apiService = retrofitInstance.create(GreenBayService::class.java)
         var loginResponse: LoginResult? = null
@@ -127,6 +118,17 @@ class LoginFragment : Fragment() {
                                 apply()
                             }
                             loginResponse = LoginResult(true, accessToken ?: "")
+                            if (loginResponse!!.success) {
+                                binding.loginBtn.isEnabled = true
+                                viewModel.email = email
+                                binding.loginBtn.text = getString(R.string.login)
+                                binding.progressBar.visibility = INVISIBLE
+                                navController.navigate(R.id.action_loginFragment_to_homeActivity)
+                            } else {
+                                binding.loginBtn.isEnabled = true
+                                binding.loginBtn.text = getString(R.string.login)
+                                binding.progressBar.visibility = INVISIBLE
+                            }
                         }
                     }
 
@@ -135,6 +137,5 @@ class LoginFragment : Fragment() {
                     }
                 })
         }
-        return loginResponse!!
     }
 }
