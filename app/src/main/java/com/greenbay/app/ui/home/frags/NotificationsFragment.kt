@@ -111,7 +111,7 @@ class NotificationsFragment : Fragment() {
                     notificationsLoadingTv.visibility = GONE
                     notificationsRv.visibility = GONE
                     noItemsTvNotifications.visibility = VISIBLE
-                    noItemsTvNotifications.visibility = VISIBLE
+                    noItemsIvNotifications.visibility = VISIBLE
                 }
             } else {
                 binding.apply {
@@ -119,7 +119,7 @@ class NotificationsFragment : Fragment() {
                     notificationsLoadingTv.visibility = GONE
                     notificationsRv.visibility = GONE
                     noItemsTvNotifications.visibility = GONE
-                    noItemsTvNotifications.visibility = GONE
+                    noItemsIvNotifications.visibility = GONE
                     notificationsRv.visibility = VISIBLE
                 }
                 notificationsAdapter.setNotifications(it)

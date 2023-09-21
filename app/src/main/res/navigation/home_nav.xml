@@ -18,7 +18,7 @@
     <fragment
         android:id="@+id/tasksFragment"
         android:name="com.greenbay.app.ui.home.frags.TasksFragment"
-        android:label="Tasks"
+        android:label="Pending Tasks"
         tools:layout="@layout/fragment_tasks" />
     <fragment
         android:id="@+id/profileFragment"

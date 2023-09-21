@@ -1,5 +1,6 @@
 package com.greenbay.app.ui.home.frags
 
+import android.annotation.SuppressLint
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -30,6 +31,7 @@ class ProfileFragment : Fragment() {
         return binding.root
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val prefs = requireActivity().getSharedPreferences(
@@ -61,12 +63,12 @@ class ProfileFragment : Fragment() {
                     apply()
                 }
                 Log.i("ProfileFragment", "onViewCreated: $accessToken")
-                binding.profileNameTv.text = it.username
-                binding.profileFirstNameTv.text = it.firstName
-                binding.profileLastNameTv.text = it.lastName
-                binding.profileEmailTv.text = it.email
-                binding.profilePhoneTv.text = it.phone
-                binding.profileIdNoTv.text = it.idNumber
+                binding.profileNameTv.text = "Username: ${it.username}"
+                binding.profileFirstNameTv.text = "First name: ${it.firstName}"
+                binding.profileLastNameTv.text = "Last name: ${it.lastName}"
+                binding.profileEmailTv.text = "Email: ${it.email}"
+                binding.profilePhoneTv.text = "Phone: ${it.phone}"
+                binding.profileIdNoTv.text = "ID No.: ${it.idNumber}"
             }
         }else{
             Snackbar.make(binding.root, "Error getting user", Snackbar.LENGTH_LONG).show()
