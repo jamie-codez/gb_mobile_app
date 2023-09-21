@@ -60,15 +60,15 @@
         app:layout_constraintStart_toStartOf="@id/tasks_progress_bar"
         app:layout_constraintEnd_toEndOf="@id/tasks_progress_bar"/>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:id="@+id/add_task_fab"
-        android:contentDescription="@string/fab"
-        android:elevation="20dp"
-        android:src="@drawable/add"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+<!--    <com.google.android.material.floatingactionbutton.FloatingActionButton-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_margin="16dp"-->
+<!--        android:id="@+id/add_task_fab"-->
+<!--        android:contentDescription="@string/fab"-->
+<!--        android:elevation="20dp"-->
+<!--        android:src="@drawable/add"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent" />-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

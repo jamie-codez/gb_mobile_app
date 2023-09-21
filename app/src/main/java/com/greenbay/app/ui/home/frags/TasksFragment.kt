@@ -36,9 +36,9 @@ class TasksFragment : Fragment() {
             tasksRv.visibility = View.GONE
             noItemsIvTasks.visibility = View.GONE
             noItemsTvTasks.visibility = View.GONE
-            addTaskFab.setOnClickListener {
-//                val dialog = LayoutInflater.from(requireContext()).inflate(R.layout.add_task_dialog, null)
-            }
+//            addTaskFab.setOnClickListener {
+////                val dialog = LayoutInflater.from(requireContext()).inflate(R.layout.add_task_dialog, null)
+//            }
         }
         val tasksRecyclerView = binding.tasksRv
         val tasksAdapter = TasksAdapter(listOf())
