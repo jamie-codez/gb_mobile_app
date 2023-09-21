@@ -47,6 +47,8 @@ class NotificationsFragment : Fragment() {
             val alertDialogBuilder = androidx.appcompat.app.AlertDialog.Builder(requireContext())
             alertDialogBuilder.setTitle("Add Notification")
             alertDialogBuilder.setView(binding.root)
+            val alertDialog = alertDialogBuilder.create()
+            alertDialog.show()
             binding.communicationDialogTitleEt.doOnTextChanged { text, start, before, count ->
                 if (text.toString().trim().isNotEmpty()) {
                     binding.communicationDialogTitleEtl.error = null
@@ -86,7 +88,7 @@ class NotificationsFragment : Fragment() {
                             "Notification added successfully",
                             Snackbar.LENGTH_LONG
                         ).show()
-                        alertDialogBuilder.create().dismiss()
+                        alertDialog.dismiss()
                     } else {
                         Snackbar.make(
                             binding.root,
@@ -96,7 +98,6 @@ class NotificationsFragment : Fragment() {
                     }
                 }
             }
-            alertDialogBuilder.create().show()
         }
         val notificationsAdapter = NotificationsAdapter(listOf())
         val notificationRecyclerView = binding.notificationsRv

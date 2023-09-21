@@ -163,6 +163,8 @@ class PaymentsFragment : Fragment() {
             val alertDialogBuilder = AlertDialog.Builder(requireContext())
             alertDialogBuilder.setTitle("Make Payment")
             alertDialogBuilder.setView(binding.root)
+            val alertDialog = alertDialogBuilder.create()
+            alertDialog.show()
             binding.dialogPayBtn.setOnClickListener {
                 binding.apply {
                     paymentsProgressBar.visibility = View.VISIBLE
@@ -203,7 +205,7 @@ class PaymentsFragment : Fragment() {
                             dialogPayBtn.isEnabled=true
                             dialogPayBtn.text = "Pay"
                         }
-                        alertDialogBuilder.create().dismiss()
+                        alertDialog.dismiss()
                     } else {
                         Snackbar.make(binding.root, "Payment request failed", Snackbar.LENGTH_LONG)
                             .show()
@@ -215,8 +217,6 @@ class PaymentsFragment : Fragment() {
                     }
                 }
             }
-            val alertDialog = alertDialogBuilder.create()
-            alertDialog.show()
         }
         val paymentsAdapter = PaymentsAdapter(listOf())
         val paymentsRecyclerView = binding.paymentsRv
