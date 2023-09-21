@@ -12,51 +12,54 @@ import com.greenbay.app.R
 import com.greenbay.app.models.AppUser
 import com.greenbay.app.models.AppUserResponse
 import com.greenbay.app.models.LoginModel
+import com.greenbay.app.models.LoginResponse
 import com.greenbay.app.models.ResponseModel
 import com.greenbay.app.network.Repository
 import com.greenbay.app.network.RetrofitInstance
 import kotlinx.coroutines.launch
-import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class AuthViewModel(application: Application) : AndroidViewModel(application) {
     private val repository = Repository(RetrofitInstance.getApiService())
-    private var loginStatus: MutableLiveData<Boolean> = MutableLiveData(false)
+
+    //    private var loginResult: MutableLiveData<LoginResult> = MutableLiveData()
     private var appUser: MutableLiveData<AppUser> = MutableLiveData()
     private var prefs: SharedPreferences = application.getSharedPreferences(
         application.getString(R.string.app_name),
         Context.MODE_PRIVATE
     )
     private var updateUser = MutableLiveData<AppUser>()
+    var email: String = ""
 
-    fun login(email: String, password: String): LiveData<Boolean> {
+    fun login(email: String, password: String): LiveData<LoginResult> {
+        var loginResult: MutableLiveData<LoginResult> = MutableLiveData()
         viewModelScope.launch {
-            repository.login(LoginModel(email,password)).enqueue (object: Callback<ResponseModel> {
-                    override fun onResponse(
-                        call: Call<ResponseModel>,
-                        response: Response<ResponseModel>
-                    ) {
-                        if (response.code() == 200) {
-                            loginStatus = MutableLiveData(true)
-                            response.body()?.let {
-                                val accessToken =
-                                    JSONObject(it.data.toString()).getString("accessToken")
-                                with(prefs.edit()) {
-                                    putString("accessToken", accessToken)
-                                    apply()
-                                }
-                            }
+            repository.login(LoginModel(email, password)).enqueue(object : Callback<LoginResponse> {
+                override fun onResponse(
+                    call: Call<LoginResponse>,
+                    response: Response<LoginResponse>
+                ) {
+                    loginResult = if (response.code() == 200) {
+                        val loginResponse = response.body()
+                        val accessToken = loginResponse?.payload?.accessToken
+                        with(prefs.edit()) {
+                            putString("accessToken", accessToken)
+                            apply()
                         }
+                        MutableLiveData(LoginResult(true, accessToken ?: ""))
+                    } else {
+                        MutableLiveData(LoginResult(false, ""))
                     }
+                }
 
-                    override fun onFailure(call: Call<ResponseModel>, t: Throwable) {
-                        loginStatus = MutableLiveData(false)
-                    }
-                })
+                override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
+                    loginResult = MutableLiveData(LoginResult(false, ""))
+                }
+            })
         }
-        return loginStatus
+        return loginResult
     }
 
     fun logout() {
@@ -71,35 +74,19 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
         return !accessToken.isNullOrEmpty()
     }
 
-    fun getUser(id: String): LiveData<AppUser> {
-        val accessToken = prefs.getString("accessToken", "")
+    fun getUser(accessToken: String?, email: String): LiveData<AppUser> {
         if (!accessToken.isNullOrEmpty()) {
             viewModelScope.launch {
-                repository.getUser(id).enqueue(object : Callback<AppUserResponse> {
+                repository.getUser(accessToken, email).enqueue(object : Callback<AppUserResponse> {
                     override fun onResponse(
                         call: Call<AppUserResponse>,
                         response: Response<AppUserResponse>
                     ) {
-                        if (response.code() == 200) {
-                            val user = response.body()?.payload?.data?.get(0) as AppUser
-                            appUser = MutableLiveData(user)
-                            with(prefs.edit()) {
-                                putString("userId", user.id)
-                                putString("username", user.username)
-                                putString("firstName", user.firstName)
-                                putString("lastName", user.lastName)
-                                putString("email", user.email)
-                                putString("phone", user.phone)
-                                putString("idNumber", user.idNumber)
-                                putString("profileImage", user.profileImage)
-                                putString("roles", user.roles.toString())
-                                putString("password", user.password)
-                                putBoolean("verified", user.verified)
-                                apply()
-                                commit()
-                            }
+                        appUser = if (response.code() == 200) {
+                            val user = response.body()?.payload
+                            MutableLiveData(user)
                         } else {
-                            appUser = MutableLiveData()
+                            MutableLiveData()
                         }
                     }
 
@@ -159,3 +146,6 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
         return updateUser
     }
 }
+
+
+data class LoginResult(val success: Boolean, val accessToken: String)

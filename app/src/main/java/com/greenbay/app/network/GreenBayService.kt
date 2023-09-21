@@ -5,6 +5,7 @@ import com.greenbay.app.models.AppUserResponse
 import com.greenbay.app.models.HouseListResponse
 import com.greenbay.app.models.HouseResponse
 import com.greenbay.app.models.LoginModel
+import com.greenbay.app.models.LoginResponse
 import com.greenbay.app.models.ResponseModel
 import com.greenbay.app.models.STKPayload
 import com.greenbay.app.ui.home.models.ClientTaskResponse
@@ -31,10 +32,13 @@ import retrofit2.http.Path
 interface GreenBayService {
     //User Endpoints
     @POST("/login")
-    fun login(@Body loginModel: LoginModel): Call<ResponseModel>
+    fun login(@Body loginModel: LoginModel): Call<LoginResponse>
 
-    @GET("/user/{id}")
-    fun getUser(@Path("id") id: String): Call<AppUserResponse>
+    @GET("/user/me/{email}")
+    fun getUser(
+        @Header("access-token") token: String,
+        @Path("email") email: String
+    ): Call<AppUserResponse>
 
     @PUT("/user/{id}")
     fun updateUser(

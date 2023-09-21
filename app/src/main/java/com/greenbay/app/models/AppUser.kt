@@ -19,7 +19,7 @@ data class AppUser(
 data class AppUserResponse(
     @SerializedName("status") val status: Int,
     @SerializedName("message") val message: String,
-    @SerializedName("payload") val payload: AppUserPayload
+    @SerializedName("payload") val payload: AppUser
 )
 
 data class AppUserPayload(

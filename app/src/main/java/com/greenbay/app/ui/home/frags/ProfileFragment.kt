@@ -20,12 +20,7 @@ class ProfileFragment : Fragment() {
     private val viewModel by lazy {
          AuthViewModel(requireActivity().application)
     }
-    private val userId by lazy {
-        requireActivity().getSharedPreferences(
-            requireActivity().getString(R.string.app_name),
-            MODE_PRIVATE
-        ).getString("userId", "")
-    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,22 +32,44 @@ class ProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if (userId.isNullOrEmpty()) {
-            Snackbar.make(binding.root, "Error getting user", Snackbar.LENGTH_LONG).show()
-            return
-        }
-        viewModel.getUser(userId!!).observe(viewLifecycleOwner) {
-            if (it == null) {
-                Snackbar.make(binding.root, "Error getting user", Snackbar.LENGTH_LONG).show()
-                return@observe
+        val prefs = requireActivity().getSharedPreferences(
+            requireActivity().getString(R.string.app_name),
+            MODE_PRIVATE
+        )
+        val accessToken = prefs.getString("accessToken", "")
+        Log.i("ProfileFragment", "onViewCreated: $accessToken")
+        val email = prefs.getString("email", "")
+
+        if (email != null) {
+            viewModel.getUser(accessToken,email).observe(viewLifecycleOwner) {
+                if (it == null) {
+                    Snackbar.make(binding.root, "Error getting user", Snackbar.LENGTH_LONG).show()
+                    return@observe
+                }
+                with(prefs.edit()) {
+                    putString("userId", it.id)
+                    putString("username", it.username)
+                    putString("firstName", it.firstName)
+                    putString("lastName", it.lastName)
+                    putString("email", it.email)
+                    putString("phone", it.phone)
+                    putString("idNumber", it.idNumber)
+                    putString("profileImage", it.profileImage)
+                    putString("roles", it.roles.toString())
+                    putString("password", it.password)
+                    putBoolean("verified", it.verified)
+                    apply()
+                }
+                Log.i("ProfileFragment", "onViewCreated: $accessToken")
+                binding.profileNameTv.text = it.username
+                binding.profileFirstNameTv.text = it.firstName
+                binding.profileLastNameTv.text = it.lastName
+                binding.profileEmailTv.text = it.email
+                binding.profilePhoneTv.text = it.phone
+                binding.profileIdNoTv.text = it.idNumber
             }
-            Log.i("ProfileFragment", "onViewCreated: $userId")
-            binding.profileNameTv.text = it.username
-            binding.profileFirstNameTv.text = it.firstName
-            binding.profileLastNameTv.text = it.lastName
-            binding.profileEmailTv.text = it.email
-            binding.profilePhoneTv.text = it.phone
-            binding.profileIdNoTv.text = it.idNumber
+        }else{
+            Snackbar.make(binding.root, "Error getting user", Snackbar.LENGTH_LONG).show()
         }
     }
 

@@ -10,7 +10,7 @@ import com.greenbay.app.ui.home.models.PaymentUpdate
 
 class Repository(private val apiService: GreenBayService) {
     fun login(loginModel: LoginModel) = apiService.login(loginModel)
-    fun getUser(id: String) = apiService.getUser(id)
+    fun getUser(accessToken:String,email: String) = apiService.getUser(accessToken,email)
     fun updateUser(token: String, id: String, appUser: AppUser) =
         apiService.updateUser(token, id, appUser)
 

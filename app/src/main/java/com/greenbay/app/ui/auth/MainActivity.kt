@@ -28,10 +28,13 @@ class MainActivity : AppCompatActivity() {
             WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
         )
         setContentView(binding.root)
+        val preferences = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE)
+        val accessToken = preferences.getString("accessToken", "")
+        val isLoggedIn = !accessToken.isNullOrEmpty()
         val navHostFragment =
             supportFragmentManager.findFragmentById(binding.splashHostFragment.id) as NavHostFragment
         val navController = navHostFragment.navController
-        if (authViewModel.isLoggedIn()) {
+        if (isLoggedIn) {
             Handler(Looper.myLooper() ?: Looper.getMainLooper()).postDelayed({
                 navController.navigate(R.id.action_splashFragment_to_homeActivity)
             }, 2000)

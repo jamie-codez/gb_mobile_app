@@ -1,20 +1,29 @@
 package com.greenbay.app.ui.auth.frags
 
+import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.util.Patterns
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.core.widget.doOnTextChanged
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.NavHostFragment
 import com.greenbay.app.R
 import com.greenbay.app.databinding.FragmentLoginBinding
 import com.greenbay.app.models.LoginModel
+import com.greenbay.app.models.LoginResponse
+import com.greenbay.app.network.GreenBayService
+import com.greenbay.app.network.RetrofitInstance
 import com.greenbay.app.ui.auth.viewmodels.AuthViewModel
-import kotlin.math.log
+import com.greenbay.app.ui.auth.viewmodels.LoginResult
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 class LoginFragment : Fragment() {
@@ -62,14 +71,14 @@ class LoginFragment : Fragment() {
                 binding.loginBtn.isEnabled = true
                 binding.loginEmailEtl.error = "Email is required"
                 binding.loginBtn.text = getString(R.string.login)
-                binding.progressBar.visibility = INVISIBLE
+                binding.progressBar.visibility = GONE
                 return@setOnClickListener
             }
             if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-                it.isEnabled = true
+                binding.loginBtn.isEnabled = true
                 binding.loginEmailEtl.error = "Invalid email address"
                 binding.loginBtn.text = getString(R.string.login)
-                binding.progressBar.visibility = INVISIBLE
+                binding.progressBar.visibility = GONE
                 return@setOnClickListener
             }
             if (password.isEmpty()) {
@@ -79,19 +88,53 @@ class LoginFragment : Fragment() {
                 binding.progressBar.visibility = INVISIBLE
                 return@setOnClickListener
             }
-            viewModel.login(email, password).observe(viewLifecycleOwner) {isLoggesIn->
-                if (isLoggesIn) {
-                    it.isEnabled = true
-                    binding.loginBtn.text = getString(R.string.login)
-                    binding.progressBar.visibility = INVISIBLE
-                    navController.navigate(R.id.action_loginFragment_to_homeActivity)
-                } else {
-                    it.isEnabled = true
-                    binding.loginBtn.text = getString(R.string.login)
-                    binding.progressBar.visibility = INVISIBLE
-                }
+            val results = login(email, password)
+            if (results.success) {
+                binding.loginBtn.isEnabled = true
+                viewModel.email = email
+                binding.loginBtn.text = getString(R.string.login)
+                binding.progressBar.visibility = INVISIBLE
+                navController.navigate(R.id.action_loginFragment_to_homeActivity)
+            } else {
+                it.isEnabled = true
+                binding.loginBtn.text = getString(R.string.login)
+                binding.progressBar.visibility = INVISIBLE
             }
         }
     }
 
+    private fun login(email: String, password: String): LoginResult {
+        val retrofitInstance = RetrofitInstance.getRetrofitInstance()
+        val apiService = retrofitInstance.create(GreenBayService::class.java)
+        var loginResponse: LoginResult? = null
+        CoroutineScope(Dispatchers.IO).launch {
+            apiService.login(LoginModel(email, password))
+                .enqueue(object : retrofit2.Callback<LoginResponse> {
+                    override fun onResponse(
+                        call: retrofit2.Call<LoginResponse>,
+                        response: retrofit2.Response<LoginResponse>
+                    ) {
+                        if (response.code() == 200) {
+                            val result = response.body()
+                            val accessToken = result?.payload?.accessToken
+                            val prefs = requireActivity().getSharedPreferences(
+                                requireActivity().getString(R.string.app_name),
+                                Context.MODE_PRIVATE
+                            )
+                            with(prefs.edit()) {
+                                putString("accessToken", accessToken)
+                                putString("email", email)
+                                apply()
+                            }
+                            loginResponse = LoginResult(true, accessToken ?: "")
+                        }
+                    }
+
+                    override fun onFailure(call: retrofit2.Call<LoginResponse>, t: Throwable) {
+                        Log.i("LoginFragment", "onFailure: ${t.message}")
+                    }
+                })
+        }
+        return loginResponse!!
+    }
 }
