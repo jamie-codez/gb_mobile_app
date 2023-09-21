@@ -11,13 +11,15 @@ data class AppUser(
     @SerializedName("phone") val phone: String,
     @SerializedName("idNumber") val idNumber: String,
     @SerializedName("profileImage") val profileImage: String,
+    @SerializedName("addedBy") val addedBy: String,
     @SerializedName("roles") val roles: Roles,
     @SerializedName("password") val password: String,
-    @SerializedName("verified") val verified: Boolean
+    @SerializedName("verified") val verified: Boolean,
+    @SerializedName("addedOn") val addedOn: Long,
 )
 
 data class AppUserResponse(
-    @SerializedName("status") val status: Int,
+    @SerializedName("code") val status: Int,
     @SerializedName("message") val message: String,
     @SerializedName("payload") val payload: AppUser
 )
