@@ -170,6 +170,7 @@ class PaymentsFragment : Fragment() {
                     dialogPayBtn.text = "Processing..."
                 }
                 val amnt = binding.dialogAmountEt.text.toString()
+                val phoneNumber = binding.phoneNumberEt.text.toString()
                 if (amnt.isEmpty()) {
                     binding.apply {
                         dialogAmountEt.error = "Amount is required"
@@ -189,7 +190,11 @@ class PaymentsFragment : Fragment() {
                     }
                     return@setOnClickListener
                 }
-                viewModel.getStkPush(STKPayload(amount=ceil(amount).toInt())).observe(viewLifecycleOwner) {
+                val stkPayload = STKPayload(ceil(amount).toInt())
+                if (phoneNumber.isNotEmpty()){
+                    stkPayload.phone = phoneNumber
+                }
+                viewModel.getStkPush(stkPayload).observe(viewLifecycleOwner) {
                     if (it.status == 200) {
                         Snackbar.make(binding.root, "Payment request sent", Snackbar.LENGTH_LONG)
                             .show()

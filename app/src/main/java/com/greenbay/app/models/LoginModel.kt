@@ -21,7 +21,7 @@ data class ResponseModel(
 
 data class STKPayload(
     @SerializedName("amount")val amount:Int,
-    @SerializedName("phone")val phone:String?=null,
+    @SerializedName("phone") var phone:String?=null,
 )
 
 data class LoginResponse(
