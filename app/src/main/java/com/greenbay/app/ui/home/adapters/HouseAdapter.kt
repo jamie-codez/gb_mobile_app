@@ -54,8 +54,8 @@ class HouseAdapter(private var houses: List<House>) :
         @RequiresApi(Build.VERSION_CODES.N)
         fun bind(house: House) {
             binding.houseNumberTv.text = "House No.:${house.houseNumber}"
-            binding.houseItemRentTv.text = "Rent: ${house.rent}"
-            binding.houseItemDepositTv.text = "Deposit: ${house.deposit}"
+            binding.houseItemRentTv.text = "Rent: KES.${house.rent}"
+            binding.houseItemDepositTv.text = "Deposit: KES.${house.deposit}"
             binding.houseItemFloorTv.text = "Floor: ${house.floorNumber}"
             if (house.occupied == true) {
                 binding.houseTimeTv.text = "Occupied"
