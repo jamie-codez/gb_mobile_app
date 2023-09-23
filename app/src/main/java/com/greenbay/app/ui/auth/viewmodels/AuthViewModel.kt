@@ -108,39 +108,45 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
                 activity.getString(R.string.app_name),
                 Context.MODE_PRIVATE
             ).getString("accessToken", "")
+            val id = activity.getSharedPreferences(
+                activity.getString(R.string.app_name),
+                Context.MODE_PRIVATE
+            ).getString("userId", "")
             accessToken?.let {
-                repository.updateUser(it, appUser.id, appUser)
-                    .enqueue(object : Callback<ResponseModel> {
-                        override fun onResponse(
-                            call: Call<ResponseModel>,
-                            response: Response<ResponseModel>
-                        ) {
-                            if (response.code() == 200) {
-                                val user = response.body()?.data as AppUser
-                                updateUser = MutableLiveData(user)
-                                with(prefs.edit()) {
-                                    putString("userId", user.id)
-                                    putString("username", user.username)
-                                    putString("firstName", user.firstName)
-                                    putString("lastName", user.lastName)
-                                    putString("email", user.email)
-                                    putString("phone", user.phone)
-                                    putString("idNumber", user.idNumber)
-                                    putString("profileImage", user.profileImage)
-                                    putString("roles", user.roles.toString())
-                                    putString("password", user.password)
-                                    putBoolean("verified", user.verified)
-                                    apply()
+                if (id != null) {
+                    repository.updateUser(it, id, appUser)
+                        .enqueue(object : Callback<ResponseModel> {
+                            override fun onResponse(
+                                call: Call<ResponseModel>,
+                                response: Response<ResponseModel>
+                            ) {
+                                if (response.code() == 200) {
+                                    val user = response.body()?.data as AppUser
+                                    updateUser = MutableLiveData(user)
+                                    with(prefs.edit()) {
+                                        putString("userId", user.id)
+                                        putString("username", user.username)
+                                        putString("firstName", user.firstName)
+                                        putString("lastName", user.lastName)
+                                        putString("email", user.email)
+                                        putString("phone", user.phone)
+                                        putString("idNumber", user.idNumber)
+                                        putString("profileImage", user.profileImage)
+                                        putString("roles", user.roles.toString())
+                                        putString("password", user.password)
+                                        putBoolean("verified", user.verified)
+                                        apply()
+                                    }
+                                } else {
+                                    updateUser = MutableLiveData()
                                 }
-                            } else {
+                            }
+
+                            override fun onFailure(call: Call<ResponseModel>, t: Throwable) {
                                 updateUser = MutableLiveData()
                             }
-                        }
-
-                        override fun onFailure(call: Call<ResponseModel>, t: Throwable) {
-                            updateUser = MutableLiveData()
-                        }
-                    })
+                        })
+                }
             }
         }
         return updateUser

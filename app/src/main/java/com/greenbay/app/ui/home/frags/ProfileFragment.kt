@@ -2,22 +2,25 @@ package com.greenbay.app.ui.home.frags
 
 import android.annotation.SuppressLint
 import android.content.Context.MODE_PRIVATE
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
+import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
+import com.google.gson.Gson
 import com.greenbay.app.R
-import com.greenbay.app.databinding.FragmentLandingBinding
 import com.greenbay.app.databinding.FragmentProfileBinding
+import com.greenbay.app.databinding.ProfileUpdateFormBinding
+import com.greenbay.app.models.AppUser
 import com.greenbay.app.models.AppUserResponse
+import com.greenbay.app.models.Roles
 import com.greenbay.app.network.GreenBayService
 import com.greenbay.app.network.RetrofitInstance
 import com.greenbay.app.ui.auth.viewmodels.AuthViewModel
-import com.greenbay.app.ui.home.viewmodels.HomeViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -74,7 +77,7 @@ class ProfileFragment : Fragment() {
                                 putString("profileImage", user.profileImage)
                                 putString("roles", user.roles.toString())
                                 putString("password", user.password)
-                                putBoolean("verified", user.verified)
+                                user.verified?.let { putBoolean("verified", it) }
                                 apply()
                             }
                             Log.i("ProfileFragment", "onViewCreated: $accessToken")
@@ -84,11 +87,13 @@ class ProfileFragment : Fragment() {
                             binding.profileEmailTv.text = "Email: ${user.email}"
                             binding.profilePhoneTv.text = "Phone: ${user.phone}"
                             binding.profileIdNoTv.text = "ID No.: ${user.idNumber}"
-                        }else{
-                            Snackbar.make(binding.root, "Error getting user", Snackbar.LENGTH_LONG).show()
+                        } else {
+                            Snackbar.make(binding.root, "Error getting user", Snackbar.LENGTH_LONG)
+                                .show()
                         }
-                    }else{
-                        Snackbar.make(binding.root, "Error getting user", Snackbar.LENGTH_LONG).show()
+                    } else {
+                        Snackbar.make(binding.root, "Error getting user", Snackbar.LENGTH_LONG)
+                            .show()
                     }
                 }
 
@@ -98,38 +103,88 @@ class ProfileFragment : Fragment() {
 
             })
         }
+        binding.editProfileFab.setOnClickListener {
+            val inflater = LayoutInflater.from(requireContext())
+                .inflate(R.layout.profile_update_form, binding.root, false)
+            val updateBinding = ProfileUpdateFormBinding.bind(inflater)
+            val alertDialogBuilder = AlertDialog.Builder(requireContext())
+                .setTitle("Profile Update")
+                .setView(updateBinding.root)
+            val alertDialog = alertDialogBuilder.create()
+            alertDialog.show()
 
-//        if (email != null) {
-//            viewModel.getUser(accessToken,email).observe(viewLifecycleOwner) {
-//                if (it == null) {
-//                    Snackbar.make(binding.root, "Error getting user", Snackbar.LENGTH_LONG).show()
-//                    return@observe
-//                }
-//                with(prefs.edit()) {
-//                    putString("userId", it.id)
-//                    putString("username", it.username)
-//                    putString("firstName", it.firstName)
-//                    putString("lastName", it.lastName)
-//                    putString("email", it.email)
-//                    putString("phone", it.phone)
-//                    putString("idNumber", it.idNumber)
-//                    putString("profileImage", it.profileImage)
-//                    putString("roles", it.roles.toString())
-//                    putString("password", it.password)
-//                    putBoolean("verified", it.verified)
-//                    apply()
-//                }
-//                Log.i("ProfileFragment", "onViewCreated: $accessToken")
-//                binding.profileNameTv.text = "Username: ${it.username}"
-//                binding.profileFirstNameTv.text = "First name: ${it.firstName}"
-//                binding.profileLastNameTv.text = "Last name: ${it.lastName}"
-//                binding.profileEmailTv.text = "Email: ${it.email}"
-//                binding.profilePhoneTv.text = "Phone: ${it.phone}"
-//                binding.profileIdNoTv.text = "ID No.: ${it.idNumber}"
-//            }
-//        }else{
-//            Snackbar.make(binding.root, "Error getting user", Snackbar.LENGTH_LONG).show()
-//        }
+            updateBinding.profileUpdateBtn.setOnClickListener {
+                val username = updateBinding.usernameEt.text.toString().trim()
+                val firstName = updateBinding.firstNameEt.text.toString().trim()
+                val lastName = updateBinding.lastNameEt.text.toString().trim()
+                val email = updateBinding.emailEt.text.toString().trim()
+                val phone = updateBinding.phoneEt.text.toString().trim()
+                val idNumber = updateBinding.idNoEt.text.toString().trim()
+                val appUser: AppUser
+                updateBinding.apply {
+                    if (username.isEmpty()) {
+                        usernameEtl.error = "Username is required"
+                        return@setOnClickListener
+                    }
+                    if (firstName.isEmpty()) {
+                        firstNameEtl.error = "First name is required"
+                        return@setOnClickListener
+                    }
+                    if (lastName.isEmpty()) {
+                        lastNameEtl.error = "Last name is required"
+                        return@setOnClickListener
+                    }
+                    if (email.isEmpty()) {
+                        emailEtl.error = "Email is required"
+                        return@setOnClickListener
+                    }
+                    if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                        emailEtl.error = "Invalid email"
+                        return@setOnClickListener
+                    }
+                    if (phone.isEmpty()) {
+                        phoneEtl.error = "Phone is required"
+                        return@setOnClickListener
+                    }
+                    if (idNumber.isEmpty()) {
+                        idNoEtl.error = "ID No. is required"
+                        return@setOnClickListener
+                    }
+                    val password = prefs.getString("password", "")
+                    val roles = prefs.getString("roles", "")
+                    appUser = AppUser(
+                        username = username,
+                        firstName = firstName,
+                        lastName = lastName,
+                        email = email,
+                        phone = phone,
+                        idNumber = idNumber,
+                        profileImage = "",
+                        addedBy = "",
+                        roles = Gson().fromJson(roles, Roles::class.java),
+                        password = password!!,
+                        verified = true,
+                        addedOn = null
+                    )
+                }
+                viewModel.updateAppUser(requireActivity(), appUser).observe(viewLifecycleOwner) {
+                    if (it != null) {
+                        Snackbar.make(
+                            binding.root,
+                            "Profile updated successfully",
+                            Snackbar.LENGTH_LONG
+                        ).show()
+                        alertDialog.dismiss()
+                    } else {
+                        Snackbar.make(
+                            binding.root,
+                            "Failed to update profile",
+                            Snackbar.LENGTH_LONG
+                        ).show()
+                    }
+                }
+            }
+        }
     }
 
 }

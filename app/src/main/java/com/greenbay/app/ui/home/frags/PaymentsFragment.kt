@@ -106,6 +106,8 @@ class PaymentsFragment : Fragment() {
             val alertDialogBuilder = AlertDialog.Builder(requireContext())
             alertDialogBuilder.setTitle("Add Payment")
             alertDialogBuilder.setView(binding.root)
+            val alertDialog = alertDialogBuilder.create()
+            alertDialog.show()
             binding.apply {
                 dialogAddPaymentBtn.setOnClickListener {
                     val title = paymentDialogTitleEt.text.toString().trim()
@@ -137,7 +139,7 @@ class PaymentsFragment : Fragment() {
                         verified = false
                     )
                     viewModel.createPayment(payment).observe(viewLifecycleOwner) {
-                        if (it.id != null) {
+                        if (it.status == 200 || it.status == 201) {
                             Snackbar.make(
                                 binding.root,
                                 "Payment added successfully",
@@ -154,8 +156,7 @@ class PaymentsFragment : Fragment() {
                     }
                 }
             }
-            val alertDialog = alertDialogBuilder.create()
-            alertDialog.show()
+
         }
         binding.makePaymentFab.setOnClickListener {
             val payView = layoutInflater.inflate(R.layout.pay_dialog, view as ViewGroup?, false)

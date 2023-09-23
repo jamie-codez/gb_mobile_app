@@ -3,7 +3,7 @@ package com.greenbay.app.models
 import com.google.gson.annotations.SerializedName
 
 data class AppUser(
-    @SerializedName("_id") val id: String,
+    @SerializedName("_id") val id: String? = null,
     @SerializedName("username") val username: String,
     @SerializedName("firstName") val firstName: String,
     @SerializedName("lastName") val lastName: String,
@@ -14,8 +14,8 @@ data class AppUser(
     @SerializedName("addedBy") val addedBy: String,
     @SerializedName("roles") val roles: Roles,
     @SerializedName("password") val password: String,
-    @SerializedName("verified") val verified: Boolean,
-    @SerializedName("addedOn") val addedOn: Long,
+    @SerializedName("verified") val verified: Boolean? = null,
+    @SerializedName("addedOn") val addedOn: Long?,
 )
 
 data class AppUserResponse(

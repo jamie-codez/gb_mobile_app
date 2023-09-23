@@ -51,7 +51,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
     val payments = MutableLiveData<List<Payment>>()
     val payment = MutableLiveData<Payment>()
     val stkResponse = MutableLiveData<ResponseModel>()
-    val pay = MutableLiveData<Payment>()
+    val pay = MutableLiveData<ResponseModel>()
     val updatePayment = MutableLiveData<Payment>()
     val tenant = MutableLiveData<Tenant>()
     val houses = MutableLiveData<List<House>?>()
@@ -267,7 +267,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
         return stkResponse
     }
 
-    fun createPayment(payment: Payment): MutableLiveData<Payment> {
+    fun createPayment(payment: Payment): MutableLiveData<ResponseModel> {
         viewModelScope.launch {
             repository.createPayment(accessToken, payment)
                 .enqueue(object : Callback<ResponseModel> {
@@ -276,14 +276,14 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
                         response: Response<ResponseModel>
                     ) {
                         if (response.code() == 200) {
-                            pay.value = response.body()?.data as Payment
+                            pay.value = response.body()
                         } else {
-                            pay.value = Payment("", "", "", "", "", "",  false)
+                            pay.value = ResponseModel(0, "", "")
                         }
                     }
 
                     override fun onFailure(call: Call<ResponseModel>, t: Throwable) {
-                        pay.value = Payment("", "", "", "", "", "",  false)
+                        pay.value = ResponseModel(0, "", "")
                     }
                 })
         }
